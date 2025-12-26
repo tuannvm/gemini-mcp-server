@@ -10,8 +10,8 @@ MCP server for Google Gemini CLI integration with large file analysis, web searc
 graph LR
     A[Claude Code] --> B[Gemini MCP Server]
 
-    B --> C[ask-gemini]
-    B --> S[search]
+    B --> C[gemini]
+    B --> S[web-search]
     B --> M[analyze-media]
     B --> SH[shell]
     B --> D[brainstorm]
@@ -93,24 +93,24 @@ Add to your Claude Desktop configuration file:
 
 Once installed, Claude Code can use these tools:
 
-### `ask-gemini` - File Analysis & Questions
+### `gemini` - File Analysis & Questions
 Analyze files and codebases using Gemini's large context window with the `@` syntax.
 
 **Basic Usage:**
 ```
-Use ask-gemini to analyze @src/main.js and explain what it does
+Use gemini to analyze @src/main.js and explain what it does
 ```
 
 **Advanced Usage:**
 ```
 # Model selection (defaults to gemini-3-pro-preview)
-Use ask-gemini with model "gemini-3-flash-preview" to quickly summarize @package.json
+Use gemini with model "gemini-3-flash-preview" to quickly summarize @package.json
 
 # Sandbox mode for safe code execution
-Use ask-gemini with sandbox true to test @script.py safely
+Use gemini with sandbox true to test @script.py safely
 
 # Change mode for structured edits
-Use ask-gemini with changeMode true to refactor @src/utils.ts
+Use gemini with changeMode true to refactor @src/utils.ts
 ```
 
 **Parameters:**
@@ -119,21 +119,21 @@ Use ask-gemini with changeMode true to refactor @src/utils.ts
 - `sandbox` (optional): Enable sandbox mode for safe execution
 - `changeMode` (optional): Enable structured edit mode for code changes
 
-### `search` - Web Search with Google Grounding
+### `web-search` - Web Search with Google Grounding
 Search the web using Gemini with Google Search grounding for real-time information.
 
 **Basic Usage:**
 ```
-Use search to find the latest React 19 features
+Use web-search to find the latest React 19 features
 ```
 
 **Advanced Usage:**
 ```
 # Get raw results without summarization
-Use search with query "kubernetes security best practices 2025" and summarize false
+Use web-search with query "kubernetes security best practices 2025" and summarize false
 
 # Use specific model
-Use search with query "latest AI news" and model "gemini-3-pro-preview"
+Use web-search with query "latest AI news" and model "gemini-3-pro-preview"
 ```
 
 **Parameters:**
@@ -235,17 +235,17 @@ Get information about Gemini CLI capabilities and commands.
 
 **Large Codebase Analysis:**
 ```
-Use ask-gemini to analyze @. and provide an architecture overview
+Use gemini to analyze @. and provide an architecture overview
 ```
 
 **File Comparison:**
 ```
-Use ask-gemini to compare @src/old.ts and @src/new.ts and explain the differences
+Use gemini to compare @src/old.ts and @src/new.ts and explain the differences
 ```
 
 **Code Refactoring with Structured Edits:**
 ```
-Use ask-gemini with changeMode true to refactor @src/utils.ts for better error handling
+Use gemini with changeMode true to refactor @src/utils.ts for better error handling
 ```
 
 **Creative Brainstorming:**
@@ -255,7 +255,7 @@ Use brainstorm with methodology "design-thinking" to improve the user dashboard 
 
 **Web Research:**
 ```
-Use search to find the latest security vulnerabilities in npm packages
+Use web-search to find the latest security vulnerabilities in npm packages
 ```
 
 **Screenshot Analysis:**
@@ -269,6 +269,21 @@ Use shell with task "find all files modified in the last 24 hours" and dryRun fa
 ```
 
 ## Advanced Features
+
+### MCP 2025-11-25 Tool Annotations
+
+All tools include annotations that help MCP clients understand tool behavior:
+
+| Tool | `destructiveHint` | `readOnlyHint` | `idempotentHint` | `openWorldHint` |
+|------|-------------------|----------------|------------------|-----------------|
+| `gemini` | ✓ | - | - | ✓ |
+| `web-search` | - | ✓ | - | ✓ |
+| `analyze-media` | - | ✓ | - | ✓ |
+| `shell` | ✓ | - | - | ✓ |
+| `brainstorm` | - | ✓ | - | ✓ |
+| `fetch-chunk` | - | ✓ | ✓ | - |
+| `ping` | - | ✓ | ✓ | - |
+| `help` | - | ✓ | ✓ | - |
 
 ### Large File Handling
 - Gemini's massive context window handles large files that would exceed other models' limits

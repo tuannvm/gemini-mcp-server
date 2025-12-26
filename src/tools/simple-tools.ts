@@ -10,6 +10,13 @@ export const pingTool: UnifiedTool = {
   name: 'ping',
   description: 'Test connectivity by echoing a message back.',
   zodSchema: pingArgsSchema,
+  annotations: {
+    title: 'Ping Server',
+    readOnlyHint: true,
+    destructiveHint: false,
+    idempotentHint: true,
+    openWorldHint: false,
+  },
   inputSchema: {
     type: 'object',
     properties: {
@@ -37,6 +44,13 @@ export const helpTool: UnifiedTool = {
   name: 'help',
   description: 'Display Gemini CLI help and available options.',
   zodSchema: helpArgsSchema,
+  annotations: {
+    title: 'Get Help',
+    readOnlyHint: true,
+    destructiveHint: false,
+    idempotentHint: true,
+    openWorldHint: false,
+  },
   inputSchema: {
     type: 'object',
     properties: {},

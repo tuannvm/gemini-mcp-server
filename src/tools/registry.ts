@@ -1,5 +1,6 @@
 import { Tool, Prompt } from '@modelcontextprotocol/sdk/types.js';
 import { ToolArguments } from '../constants.js';
+import { ToolAnnotations } from '../types.js';
 import { ZodTypeAny, ZodError } from 'zod';
 
 export interface UnifiedTool {
@@ -7,6 +8,7 @@ export interface UnifiedTool {
   description: string;
   zodSchema: ZodTypeAny;
   inputSchema: Tool['inputSchema'];
+  annotations?: ToolAnnotations;
 
   prompt?: {
     description: string;
@@ -35,6 +37,7 @@ export function getToolDefinitions(): Tool[] {
     name: tool.name,
     description: tool.description,
     inputSchema: tool.inputSchema,
+    ...(tool.annotations && { annotations: tool.annotations }),
   }));
 }
 

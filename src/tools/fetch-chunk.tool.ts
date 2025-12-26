@@ -21,8 +21,14 @@ export const fetchChunkTool: UnifiedTool = {
   name: 'fetch-chunk',
   description:
     'Retrieves cached chunks from a changeMode response. Use this to get subsequent chunks after receiving a partial changeMode response.',
-
   zodSchema: fetchChunkArgsSchema,
+  annotations: {
+    title: 'Fetch Response Chunk',
+    readOnlyHint: true,
+    destructiveHint: false,
+    idempotentHint: true,
+    openWorldHint: false,
+  },
   inputSchema: {
     type: 'object',
     properties: {
@@ -56,7 +62,10 @@ export const fetchChunkTool: UnifiedTool = {
     args,
     _onProgress?: (newOutput: string) => void
   ): Promise<string> => {
-    const { cacheKey, chunkIndex } = args as { cacheKey: string; chunkIndex: number };
+    const { cacheKey, chunkIndex } = args as {
+      cacheKey: string;
+      chunkIndex: number;
+    };
 
     Logger.toolInvocation('fetch-chunk', args);
     Logger.debug(`Fetching chunk ${chunkIndex} with cache key: ${cacheKey}`);

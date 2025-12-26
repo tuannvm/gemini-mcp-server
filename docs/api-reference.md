@@ -22,28 +22,29 @@ All tools include annotations that provide hints to MCP clients about tool behav
 
 #### Tool Annotation Matrix
 
-| Tool | `readOnlyHint` | `destructiveHint` | `idempotentHint` | `openWorldHint` |
-|------|---------------|-------------------|------------------|-----------------|
-| `ask-gemini` | `false` | `false` | `false` | `true` |
-| `search` | `true` | `false` | `true` | `true` |
-| `analyze-media` | `true` | `false` | `true` | `true` |
-| `shell` | `false` | `true` | `false` | `true` |
-| `brainstorm` | `true` | `false` | `false` | `true` |
-| `fetch-chunk` | `true` | `false` | `true` | `false` |
-| `ping` | `true` | `false` | `true` | `false` |
-| `help` | `true` | `false` | `true` | `false` |
+| Tool | Title | `readOnlyHint` | `destructiveHint` | `idempotentHint` | `openWorldHint` |
+|------|-------|---------------|-------------------|------------------|-----------------|
+| `gemini` | Query Gemini AI | `false` | `true` | `false` | `true` |
+| `web-search` | Web Search | `true` | `false` | `false` | `true` |
+| `analyze-media` | Analyze Media | `true` | `false` | `false` | `true` |
+| `shell` | Shell Commands | `false` | `true` | `false` | `true` |
+| `brainstorm` | Brainstorm Ideas | `true` | `false` | `false` | `true` |
+| `fetch-chunk` | Fetch Response Chunk | `true` | `false` | `true` | `false` |
+| `ping` | Ping Server | `true` | `false` | `true` | `false` |
+| `help` | Get Help | `true` | `false` | `true` | `false` |
+| `timeout-test` | Test Timeout | `true` | `false` | `true` | `false` |
 
 ### Progress Notifications
 
 For long-running operations, the server sends `notifications/progress` messages when the client includes a `progressToken` in the request `_meta`.
 
-**Supported Tools:** `ask-gemini`, `search`, `analyze-media`, `shell`, `brainstorm`
+**Supported Tools:** `gemini`, `web-search`, `analyze-media`, `shell`, `brainstorm`
 
 ---
 
 ## Tools
 
-### `ask-gemini` - File Analysis & Questions
+### `gemini` - File Analysis & Questions
 
 Analyze files and codebases using Gemini's large context window with the `@` syntax.
 
@@ -89,7 +90,7 @@ Analyze files and codebases using Gemini's large context window with the `@` syn
 
 ---
 
-### `search` - Web Search
+### `web-search` - Web Search
 
 Search the web using Gemini with Google Search grounding for real-time information.
 

@@ -11,16 +11,17 @@ MCP server for Google Gemini CLI integration with large file analysis, web searc
 
 ## Available Tools
 
-| Tool | Description | Annotations |
-|------|-------------|-------------|
-| `ask-gemini` | File analysis and questions using Gemini | `destructiveHint: false`, `openWorldHint: true` |
-| `search` | Web search with Google grounding | `readOnlyHint: true`, `openWorldHint: true` |
+| Tool | Description | Key Annotations |
+|------|-------------|-----------------|
+| `gemini` | File analysis and questions using Gemini | `destructiveHint: true`, `openWorldHint: true` |
+| `web-search` | Web search with Google grounding | `readOnlyHint: true`, `openWorldHint: true` |
 | `analyze-media` | Multimodal analysis (images, PDFs) | `readOnlyHint: true`, `openWorldHint: true` |
 | `shell` | Shell command generation/execution | `destructiveHint: true`, `openWorldHint: true` |
 | `brainstorm` | Creative ideation | `readOnlyHint: true`, `openWorldHint: true` |
-| `fetch-chunk` | Retrieve cached response chunks | `readOnlyHint: true`, `openWorldHint: false` |
-| `ping` | Connection test | `readOnlyHint: true`, `openWorldHint: false` |
-| `help` | Gemini CLI help | `readOnlyHint: true`, `openWorldHint: false` |
+| `fetch-chunk` | Retrieve cached response chunks | `readOnlyHint: true`, `idempotentHint: true` |
+| `ping` | Connection test | `readOnlyHint: true`, `idempotentHint: true` |
+| `help` | Gemini CLI help | `readOnlyHint: true`, `idempotentHint: true` |
+| `timeout-test` | Test timeout prevention | `readOnlyHint: true`, `idempotentHint: true` |
 
 ## Requirements
 

@@ -30,6 +30,13 @@ export const analyzeMediaTool: UnifiedTool = {
   description:
     'Analyze images, PDFs, or other media files using Gemini multimodal capabilities. Supports screenshots, diagrams, documents, and more.',
   zodSchema: analyzeMediaArgsSchema,
+  annotations: {
+    title: 'Analyze Media',
+    readOnlyHint: true,
+    destructiveHint: false,
+    idempotentHint: false,
+    openWorldHint: true,
+  },
   inputSchema: {
     type: 'object',
     properties: {

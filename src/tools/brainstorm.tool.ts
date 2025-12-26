@@ -191,6 +191,13 @@ export const brainstormTool: UnifiedTool = {
   description:
     'Generate creative ideas using structured frameworks (SCAMPER, Design Thinking, etc.) with domain context, feasibility analysis, and iterative refinement.',
   zodSchema: brainstormArgsSchema,
+  annotations: {
+    title: 'Brainstorm Ideas',
+    readOnlyHint: true,
+    destructiveHint: false,
+    idempotentHint: false,
+    openWorldHint: true,
+  },
   inputSchema: {
     type: 'object',
     properties: {
