@@ -114,6 +114,10 @@ npm run build  # Build
 npm test       # Run tests
 ```
 
+## Acknowledgments
+
+Inspired by [gemini-mcp-tool](https://github.com/jamubc/gemini-mcp-tool).
+
 ## License
 
 MIT — This is an unofficial tool, not affiliated with Google.
