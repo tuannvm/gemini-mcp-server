@@ -8,10 +8,14 @@
 
 import chalk from 'chalk';
 import { GeminiMcpServer } from './server.js';
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
+const pkg = require('../package.json');
 
 const SERVER_CONFIG = {
   name: 'gemini-mcp-server',
-  version: '1.0.0',
+  version: pkg.version,
 };
 
 async function main(): Promise<void> {
