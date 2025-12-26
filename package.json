@@ -1,6 +1,6 @@
 {
   "name": "@tuannvm/gemini-mcp-server",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "MCP server for Gemini CLI integration",
   "type": "module",
   "main": "dist/index.js",
