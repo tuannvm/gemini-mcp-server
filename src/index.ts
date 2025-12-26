@@ -11,7 +11,7 @@ import { GeminiMcpServer } from './server.js';
 
 const SERVER_CONFIG = {
   name: 'gemini-mcp-server',
-  version: '1.1.4',
+  version: '1.0.0',
 };
 
 async function main(): Promise<void> {

@@ -19,7 +19,7 @@ describe('Gemini MCP Server', () => {
     test('should have valid server config structure', () => {
       const config = {
         name: 'gemini-mcp-server',
-        version: '1.1.4',
+        version: '1.0.0',
       };
 
       expect(config.name).toBe('gemini-mcp-server');

@@ -1,8 +1,8 @@
 # Gemini MCP Server
 
-[![npm version](https://img.shields.io/npm/v/gemini-mcp-tool.svg)](https://www.npmjs.com/package/gemini-mcp-tool)
-[![npm downloads](https://img.shields.io/npm/dm/gemini-mcp-tool.svg)](https://www.npmjs.com/package/gemini-mcp-tool)
-[![license](https://img.shields.io/npm/l/gemini-mcp-tool.svg)](https://www.npmjs.com/package/gemini-mcp-tool)
+[![npm version](https://img.shields.io/npm/v/@tuannvm/gemini-mcp-server.svg)](https://www.npmjs.com/package/@tuannvm/gemini-mcp-server)
+[![npm downloads](https://img.shields.io/npm/dm/@tuannvm/gemini-mcp-server.svg)](https://www.npmjs.com/package/@tuannvm/gemini-mcp-server)
+[![license](https://img.shields.io/npm/l/@tuannvm/gemini-mcp-server.svg)](https://www.npmjs.com/package/@tuannvm/gemini-mcp-server)
 
 MCP server for Google Gemini CLI integration with large file analysis, web search, multimodal analysis, shell commands, and brainstorming support.
 
@@ -56,19 +56,19 @@ graph LR
 ### One-Click Installation
 
 #### VS Code
-[![Install in VS Code](https://img.shields.io/badge/VS_Code-Install_Gemini_MCP_Server-0098FF?style=flat-square&logo=visualstudiocode&logoColor=white)](https://vscode.dev/redirect/mcp/install?name=gemini-cli&config=%7B%22type%22%3A%22stdio%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22gemini-mcp-tool%22%5D%7D)
+[![Install in VS Code](https://img.shields.io/badge/VS_Code-Install_Gemini_MCP_Server-0098FF?style=flat-square&logo=visualstudiocode&logoColor=white)](https://vscode.dev/redirect/mcp/install?name=gemini-cli&config=%7B%22type%22%3A%22stdio%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40tuannvm%2Fgemini-mcp-server%22%5D%7D)
 
 #### VS Code Insiders
-[![Install in VS Code Insiders](https://img.shields.io/badge/VS_Code_Insiders-Install_Gemini_MCP_Server-24bfa5?style=flat-square&logo=visualstudiocode&logoColor=white)](https://insiders.vscode.dev/redirect/mcp/install?name=gemini-cli&config=%7B%22type%22%3A%22stdio%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22gemini-mcp-tool%22%5D%7D)
+[![Install in VS Code Insiders](https://img.shields.io/badge/VS_Code_Insiders-Install_Gemini_MCP_Server-24bfa5?style=flat-square&logo=visualstudiocode&logoColor=white)](https://insiders.vscode.dev/redirect/mcp/install?name=gemini-cli&config=%7B%22type%22%3A%22stdio%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40tuannvm%2Fgemini-mcp-server%22%5D%7D)
 
 #### Cursor
-[![Install in Cursor](https://img.shields.io/badge/Cursor-Install_Gemini_MCP_Server-00D8FF?style=flat-square&logo=cursor&logoColor=white)](https://cursor.com/en/install-mcp?name=gemini-cli&config=eyJ0eXBlIjoic3RkaW8iLCJjb21tYW5kIjoibnB4IC15IGdlbWluaS1tY3AtdG9vbCIsImVudiI6e319)
+[![Install in Cursor](https://img.shields.io/badge/Cursor-Install_Gemini_MCP_Server-00D8FF?style=flat-square&logo=cursor&logoColor=white)](https://cursor.com/en/install-mcp?name=gemini-cli&config=eyJ0eXBlIjoic3RkaW8iLCJjb21tYW5kIjoibnB4IC15IEB0dWFubnZtL2dlbWluaS1tY3Atc2VydmVyIiwiZW52Ijp7fX0=)
 
 ### Manual Installation
 
 #### Claude Code
 ```bash
-claude mcp add gemini-cli -- npx -y gemini-mcp-tool
+claude mcp add gemini-cli -- npx -y @tuannvm/gemini-mcp-server
 ```
 
 #### Claude Desktop
@@ -83,7 +83,7 @@ Add to your Claude Desktop configuration file:
   "mcpServers": {
     "gemini-cli": {
       "command": "npx",
-      "args": ["-y", "gemini-mcp-tool"]
+      "args": ["-y", "@tuannvm/gemini-mcp-server"]
     }
   }
 }
@@ -372,7 +372,7 @@ npm run format
 
 - [API Reference](docs/api-reference.md)
 - [Gemini CLI Integration](docs/gemini-cli-integration.md)
-- [Full Documentation Site](https://jamubc.github.io/gemini-mcp-tool/)
+- [Full Documentation Site](https://tuannvm.github.io/gemini-mcp-server/)
 
 ## License
 

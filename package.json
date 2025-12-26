@@ -1,11 +1,11 @@
 {
-  "name": "gemini-mcp-tool",
-  "version": "1.0.0",
+  "name": "@tuannvm/gemini-mcp-server",
+  "version": "1.0.1",
   "description": "MCP server for Gemini CLI integration",
   "type": "module",
   "main": "dist/index.js",
   "bin": {
-    "gemini-mcp": "dist/index.js"
+    "gemini-mcp-server": "dist/index.js"
   },
   "files": [
     "dist"
@@ -32,16 +32,16 @@
     "ai",
     "llm"
   ],
-  "author": "jamubc",
+  "author": "tuannvm",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jamubc/gemini-mcp-tool.git"
+    "url": "git+https://github.com/tuannvm/gemini-mcp-server.git"
   },
   "bugs": {
-    "url": "https://github.com/jamubc/gemini-mcp-tool/issues"
+    "url": "https://github.com/tuannvm/gemini-mcp-server/issues"
   },
-  "homepage": "https://github.com/jamubc/gemini-mcp-tool#readme",
+  "homepage": "https://github.com/tuannvm/gemini-mcp-server#readme",
   "engines": {
     "node": ">=18.0.0"
   },
