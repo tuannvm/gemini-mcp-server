@@ -83,7 +83,9 @@ export function getChunks(cacheKey: string): EditChunk[] | null {
     Logger.debug(`Cache read error for ${cacheKey}: ${error}`);
     try {
       fs.unlinkSync(filePath); // Clean up bad file
-    } catch {}
+    } catch {
+      // Ignore cleanup errors
+    }
     return null;
   }
 }
@@ -140,7 +142,9 @@ function enforceFileLimits(): void {
       for (const file of toRemove) {
         try {
           fs.unlinkSync(file.path);
-        } catch {}
+        } catch {
+      // Ignore cleanup errors
+    }
       }
       Logger.debug(
         `Removed ${toRemove.length} old cache files to enforce limit`
@@ -163,7 +167,9 @@ export function getCacheStats(): {
   try {
     const files = fs.readdirSync(CACHE_DIR);
     size = files.filter((f) => f.endsWith('.json')).length;
-  } catch {}
+  } catch {
+    // Ignore read errors, return 0 size
+  }
 
   return {
     size,

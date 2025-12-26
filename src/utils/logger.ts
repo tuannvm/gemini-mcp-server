@@ -6,23 +6,23 @@ export class Logger {
     return `${LOG_PREFIX} ${message}` + '\n';
   }
 
-  static log(message: string, ...args: any[]): void {
+  static log(message: string, ...args: unknown[]): void {
     console.warn(this.formatMessage(message), ...args);
   }
 
-  static warn(message: string, ...args: any[]): void {
+  static warn(message: string, ...args: unknown[]): void {
     console.warn(this.formatMessage(message), ...args);
   }
 
-  static error(message: string, ...args: any[]): void {
+  static error(message: string, ...args: unknown[]): void {
     console.error(this.formatMessage(message), ...args);
   }
 
-  static debug(message: string, ...args: any[]): void {
+  static debug(message: string, ...args: unknown[]): void {
     console.warn(this.formatMessage(message), ...args);
   }
 
-  static toolInvocation(toolName: string, args: any): void {
+  static toolInvocation(toolName: string, args: unknown): void {
     this.warn('Raw:', JSON.stringify(args, null, 2));
   }
 

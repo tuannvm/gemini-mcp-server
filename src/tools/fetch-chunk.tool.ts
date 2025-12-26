@@ -53,10 +53,10 @@ export const fetchChunkTool: UnifiedTool = {
   category: 'utility',
 
   execute: async (
-    args: any,
+    args,
     _onProgress?: (newOutput: string) => void
   ): Promise<string> => {
-    const { cacheKey, chunkIndex } = args;
+    const { cacheKey, chunkIndex } = args as { cacheKey: string; chunkIndex: number };
 
     Logger.toolInvocation('fetch-chunk', args);
     Logger.debug(`Fetching chunk ${chunkIndex} with cache key: ${cacheKey}`);
