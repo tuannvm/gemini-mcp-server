@@ -1,39 +1,63 @@
 # Gemini MCP Server Documentation
 
-## Overview
+MCP server for Google Gemini CLI integration—analyze large codebases, search the web, process images, and brainstorm ideas.
 
-MCP server for Google Gemini CLI integration with large file analysis, web search, multimodal analysis, shell commands, and brainstorming support.
+## Getting Started
 
-## Quick Links
+### Requirements
 
-- [API Reference](api-reference.md) - Complete tool documentation
-- [Gemini CLI Integration](gemini-cli-integration.md) - Version compatibility and features
-
-## Available Tools
-
-| Tool | Description | Key Annotations |
-|------|-------------|-----------------|
-| `gemini` | File analysis and questions using Gemini | `destructiveHint: true`, `openWorldHint: true` |
-| `web-search` | Web search with Google grounding | `readOnlyHint: true`, `openWorldHint: true` |
-| `analyze-media` | Multimodal analysis (images, PDFs) | `readOnlyHint: true`, `openWorldHint: true` |
-| `shell` | Shell command generation/execution | `destructiveHint: true`, `openWorldHint: true` |
-| `brainstorm` | Creative ideation | `readOnlyHint: true`, `openWorldHint: true` |
-| `fetch-chunk` | Retrieve cached response chunks | `readOnlyHint: true`, `idempotentHint: true` |
-| `ping` | Connection test | `readOnlyHint: true`, `idempotentHint: true` |
-| `help` | Gemini CLI help | `readOnlyHint: true`, `idempotentHint: true` |
-| `timeout-test` | Test timeout prevention | `readOnlyHint: true`, `idempotentHint: true` |
-
-## Requirements
-
-- **Gemini CLI v0.22.2+** - `npm install -g @google/gemini-cli`
+- **Gemini CLI v0.22.2+**: `npm install -g @google/gemini-cli`
 - **Node.js v18+**
 - **Claude Code** or compatible MCP client
 
-## Installation
+### Installation
 
 ```bash
-# Claude Code
 claude mcp add gemini-cli -- npx -y @tuannvm/gemini-mcp-server
 ```
 
-See the [README](https://github.com/tuannvm/gemini-mcp-server#readme) for complete installation options.
+See the [README](https://github.com/tuannvm/gemini-mcp-server#readme) for more installation options.
+
+## Documentation
+
+| Document | Description |
+|----------|-------------|
+| [API Reference](api-reference.md) | Complete tool documentation with parameters and examples |
+| [Gemini CLI Integration](gemini-cli-integration.md) | Authentication, model configuration, and troubleshooting |
+
+## Available Tools
+
+| Tool | Description | Behavior |
+|------|-------------|----------|
+| `gemini` | File analysis and questions | May modify files (sandbox mode) |
+| `web-search` | Web search with Google grounding | Read-only |
+| `analyze-media` | Multimodal analysis (images, PDFs) | Read-only |
+| `shell` | Shell command generation/execution | May execute commands |
+| `brainstorm` | Creative ideation | Read-only |
+| `fetch-chunk` | Retrieve cached response chunks | Read-only, idempotent |
+| `ping` | Connection test | Read-only, idempotent |
+| `help` | Gemini CLI help | Read-only, idempotent |
+
+## Quick Examples
+
+```
+# Analyze entire codebase
+Use gemini to analyze @. and explain the architecture
+
+# Web search
+Use web-search to find the latest Kubernetes security best practices
+
+# Image analysis
+Use analyze-media with filePath "@diagram.png" and prompt "explain this architecture"
+
+# Brainstorming
+Use brainstorm with methodology "SCAMPER" to improve the user dashboard
+```
+
+## Key Features
+
+- **Large Context Window**: Analyze files that exceed other models' limits
+- **@ Syntax**: Reference files directly (`@src/main.js`, `@.` for current directory)
+- **Model Fallback**: Auto-fallback to Flash model when quota exceeded
+- **Change Mode**: Structured edits for code refactoring
+- **Progress Notifications**: Real-time updates for long operations
