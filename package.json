@@ -22,10 +22,7 @@
     "format": "prettier --write src/**/*.ts",
     "format:check": "prettier --check src/**/*.ts",
     "clean": "rm -rf dist",
-    "prepublishOnly": "npm run build",
-    "docs:dev": "vitepress dev docs",
-    "docs:build": "vitepress build docs",
-    "docs:preview": "vitepress preview docs"
+    "prepublishOnly": "npm run build"
   },
   "keywords": [
     "mcp",
@@ -51,11 +48,9 @@
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.24.0",
     "chalk": "^5.6.0",
-    "zod": "^3.25.76",
-    "zod-to-json-schema": "^3.24.6"
+    "zod": "^4.2.1"
   },
   "devDependencies": {
-    "@eslint/js": "^9.33.0",
     "@types/jest": "^30.0.0",
     "@types/node": "^24.3.0",
     "@typescript-eslint/eslint-plugin": "^8.39.1",
@@ -65,8 +60,7 @@
     "prettier": "^3.6.2",
     "ts-jest": "^29.4.1",
     "tsx": "^4.20.4",
-    "typescript": "^5.9.2",
-    "vitepress": "^1.6.3"
+    "typescript": "^5.9.2"
   },
   "publishConfig": {
     "access": "public"

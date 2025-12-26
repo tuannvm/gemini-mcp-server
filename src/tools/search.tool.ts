@@ -16,17 +16,36 @@ const searchArgsSchema = z.object({
   model: z
     .string()
     .optional()
-    .describe("Model to use (default: gemini-3-flash-preview for speed)"),
+    .describe('Model to use (default: gemini-3-flash-preview for speed)'),
 });
 
 export const searchTool: UnifiedTool = {
-  name: 'search',
+  name: 'web-search',
   description:
-    'Search the web using Gemini with Google Search grounding. Returns real-time information from the web.',
+    'Search the web using Gemini with Google Search grounding for real-time information.',
   zodSchema: searchArgsSchema,
+  inputSchema: {
+    type: 'object',
+    properties: {
+      query: {
+        type: 'string',
+        description: 'Search query to find information on the web',
+      },
+      summarize: {
+        type: 'boolean',
+        default: true,
+        description: 'Summarize the search results (default: true)',
+      },
+      model: {
+        type: 'string',
+        description: 'Model to use (default: gemini-3-flash-preview for speed)',
+      },
+    },
+    required: ['query'],
+  },
   prompt: {
     description:
-      'Search the web for current information using Gemini Google Search grounding',
+      'Search the web for real-time information using Google Search grounding.',
   },
   category: 'gemini',
   execute: async (args, onProgress) => {
@@ -48,18 +67,32 @@ export const searchTool: UnifiedTool = {
 
     try {
       Logger.debug(`Executing search: ${query}`);
-      const result = await executeCommand(CLI.COMMANDS.GEMINI, cmdArgs, onProgress);
+      const result = await executeCommand(
+        CLI.COMMANDS.GEMINI,
+        cmdArgs,
+        onProgress
+      );
       return `Search results for "${query}":\n\n${result}`;
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : String(error);
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
 
       // Try with pro model if flash fails
       if (errorMessage.includes(ERROR_MESSAGES.QUOTA_EXCEEDED)) {
         Logger.warn('Flash quota exceeded, trying Pro model...');
-        const fallbackArgs = [CLI.FLAGS.MODEL, MODELS.PRO, CLI.FLAGS.PROMPT, searchPrompt];
+        const fallbackArgs = [
+          CLI.FLAGS.MODEL,
+          MODELS.PRO,
+          CLI.FLAGS.PROMPT,
+          searchPrompt,
+        ];
 
         try {
-          const result = await executeCommand(CLI.COMMANDS.GEMINI, fallbackArgs, onProgress);
+          const result = await executeCommand(
+            CLI.COMMANDS.GEMINI,
+            fallbackArgs,
+            onProgress
+          );
           return `Search results for "${query}":\n\n${result}`;
         } catch (fallbackError) {
           throw new Error(

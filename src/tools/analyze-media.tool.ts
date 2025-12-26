@@ -18,7 +18,7 @@ const analyzeMediaArgsSchema = z.object({
   model: z
     .string()
     .optional()
-    .describe("Model to use (default: gemini-3-pro-preview for multimodal)"),
+    .describe('Model to use (default: gemini-3-pro-preview for multimodal)'),
   detailed: z
     .boolean()
     .default(false)
@@ -30,6 +30,31 @@ export const analyzeMediaTool: UnifiedTool = {
   description:
     'Analyze images, PDFs, or other media files using Gemini multimodal capabilities. Supports screenshots, diagrams, documents, and more.',
   zodSchema: analyzeMediaArgsSchema,
+  inputSchema: {
+    type: 'object',
+    properties: {
+      filePath: {
+        type: 'string',
+        description:
+          'Path to the image or PDF file to analyze. Use @ syntax (e.g., @image.png, @document.pdf)',
+      },
+      prompt: {
+        type: 'string',
+        description: 'What to analyze or extract from the media file',
+      },
+      model: {
+        type: 'string',
+        description:
+          'Model to use (default: gemini-3-pro-preview for multimodal)',
+      },
+      detailed: {
+        type: 'boolean',
+        default: false,
+        description: 'Provide detailed analysis with more context',
+      },
+    },
+    required: ['filePath', 'prompt'],
+  },
   prompt: {
     description:
       'Analyze media files (images, PDFs) using Gemini multimodal AI',
@@ -63,10 +88,15 @@ export const analyzeMediaTool: UnifiedTool = {
 
     try {
       Logger.debug(`Analyzing media: ${fileRef}`);
-      const result = await executeCommand(CLI.COMMANDS.GEMINI, cmdArgs, onProgress);
+      const result = await executeCommand(
+        CLI.COMMANDS.GEMINI,
+        cmdArgs,
+        onProgress
+      );
       return `${STATUS_MESSAGES.GEMINI_RESPONSE}\n\n**File:** ${fileRef}\n\n${result}`;
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : String(error);
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
 
       // Fallback to flash if pro quota exceeded
       if (

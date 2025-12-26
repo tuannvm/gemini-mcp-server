@@ -14,7 +14,9 @@ const shellArgsSchema = z.object({
   workingDirectory: z
     .string()
     .optional()
-    .describe('Working directory for command execution (use @ syntax, e.g., @src/)'),
+    .describe(
+      'Working directory for command execution (use @ syntax, e.g., @src/)'
+    ),
   dryRun: z
     .boolean()
     .default(true)
@@ -24,7 +26,7 @@ const shellArgsSchema = z.object({
   model: z
     .string()
     .optional()
-    .describe("Model to use (default: gemini-3-flash-preview)"),
+    .describe('Model to use (default: gemini-3-flash-preview)'),
 });
 
 export const shellTool: UnifiedTool = {
@@ -32,6 +34,32 @@ export const shellTool: UnifiedTool = {
   description:
     'Generate and optionally execute shell commands using Gemini. By default runs in dry-run mode (explains commands). Set dryRun=false to execute in sandbox.',
   zodSchema: shellArgsSchema,
+  inputSchema: {
+    type: 'object',
+    properties: {
+      task: {
+        type: 'string',
+        description:
+          'Description of the shell task to perform (e.g., "list all TypeScript files", "find large files over 10MB")',
+      },
+      workingDirectory: {
+        type: 'string',
+        description:
+          'Working directory for command execution (use @ syntax, e.g., @src/)',
+      },
+      dryRun: {
+        type: 'boolean',
+        default: true,
+        description:
+          'If true, Gemini will explain the commands without executing. If false, uses sandbox mode for safe execution.',
+      },
+      model: {
+        type: 'string',
+        description: 'Model to use (default: gemini-3-flash-preview)',
+      },
+    },
+    required: ['task'],
+  },
   prompt: {
     description:
       'Generate shell commands for a task, optionally executing in sandbox mode',
@@ -84,7 +112,11 @@ Execute the necessary commands and provide:
 
     try {
       Logger.debug(`Shell task (dryRun=${dryRun}): ${task}`);
-      const result = await executeCommand(CLI.COMMANDS.GEMINI, cmdArgs, onProgress);
+      const result = await executeCommand(
+        CLI.COMMANDS.GEMINI,
+        cmdArgs,
+        onProgress
+      );
 
       const header = dryRun
         ? 'Shell Commands (Dry Run - Not Executed)'
@@ -92,7 +124,8 @@ Execute the necessary commands and provide:
 
       return `${STATUS_MESSAGES.GEMINI_RESPONSE}\n\n**${header}**\n\nTask: ${task}\n\n${result}`;
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : String(error);
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
       throw new Error(`Shell task failed: ${errorMessage}`);
     }
   },

@@ -12,11 +12,19 @@ function buildBrainstormPrompt(config: {
   ideaCount: number;
   includeAnalysis: boolean;
 }): string {
-  const { prompt, methodology, domain, constraints, existingContext, ideaCount, includeAnalysis } = config;
-  
+  const {
+    prompt,
+    methodology,
+    domain,
+    constraints,
+    existingContext,
+    ideaCount,
+    includeAnalysis,
+  } = config;
+
   // Select methodology framework
   let frameworkInstructions = getMethodologyInstructions(methodology, domain);
-  
+
   let enhancedPrompt = `# BRAINSTORMING SESSION
 
 ## Core Challenge
@@ -38,14 +46,18 @@ ${existingContext ? `**Background Context:** ${existingContext}` : ''}
 - Use clear, descriptive naming
 - Provide brief explanations for each idea
 
-${includeAnalysis ? `
+${
+  includeAnalysis
+    ? `
 ## Analysis Framework
 For each idea, provide:
 - **Feasibility:** Implementation difficulty (1-5 scale)
 - **Impact:** Potential value/benefit (1-5 scale)
 - **Innovation:** Uniqueness/creativity (1-5 scale)
 - **Quick Assessment:** One-sentence evaluation
-` : ''}
+`
+    : ''
+}
 
 ## Format
 Present ideas in a structured format:
@@ -66,23 +78,26 @@ Begin brainstorming session:`;
 /**
  * Returns methodology-specific instructions for structured brainstorming
  */
-function getMethodologyInstructions(methodology: string, domain?: string): string {
+function getMethodologyInstructions(
+  methodology: string,
+  domain?: string
+): string {
   const methodologies: Record<string, string> = {
-    'divergent': `**Divergent Thinking Approach:**
+    divergent: `**Divergent Thinking Approach:**
 - Generate maximum quantity of ideas without self-censoring
 - Build on wild or seemingly impractical ideas
 - Combine unrelated concepts for unexpected solutions
 - Use "Yes, and..." thinking to expand each concept
 - Postpone evaluation until all ideas are generated`,
 
-    'convergent': `**Convergent Thinking Approach:**
+    convergent: `**Convergent Thinking Approach:**
 - Focus on refining and improving existing concepts
 - Synthesize related ideas into stronger solutions
 - Apply critical evaluation criteria
 - Prioritize based on feasibility and impact
 - Develop implementation pathways for top ideas`,
 
-    'scamper': `**SCAMPER Creative Triggers:**
+    scamper: `**SCAMPER Creative Triggers:**
 - **Substitute:** What can be substituted or replaced?
 - **Combine:** What can be combined or merged?
 - **Adapt:** What can be adapted from other domains?
@@ -98,40 +113,142 @@ function getMethodologyInstructions(methodology: string, domain?: string): strin
 - **Consider Journey:** Think through complete user experience
 - **Prototype Mindset:** Focus on testable, iterative concepts`,
 
-    'lateral': `**Lateral Thinking Approach:**
+    lateral: `**Lateral Thinking Approach:**
 - Make unexpected connections between unrelated fields
 - Challenge fundamental assumptions
 - Use random word association to trigger new directions
 - Apply metaphors and analogies from other domains
 - Reverse conventional thinking patterns`,
 
-    'auto': `**AI-Optimized Approach:**
-${domain ? `Given the ${domain} domain, I'll apply the most effective combination of:` : 'I\'ll intelligently combine multiple methodologies:'}
+    auto: `**AI-Optimized Approach:**
+${domain ? `Given the ${domain} domain, I'll apply the most effective combination of:` : "I'll intelligently combine multiple methodologies:"}
 - Divergent exploration with domain-specific knowledge
 - SCAMPER triggers and lateral thinking
-- Human-centered perspective for practical value`
+- Human-centered perspective for practical value`,
   };
 
   return methodologies[methodology] || methodologies['auto'];
 }
 
 const brainstormArgsSchema = z.object({
-  prompt: z.string().min(1).describe("Primary brainstorming challenge or question to explore"),
-  model: z.string().optional().describe("Optional model to use (e.g., 'gemini-3-flash-preview'). If not specified, uses the default model (gemini-3-pro-preview)."),
-  methodology: z.enum(['divergent', 'convergent', 'scamper', 'design-thinking', 'lateral', 'auto']).default('auto').describe("Brainstorming framework: 'divergent' (generate many ideas), 'convergent' (refine existing), 'scamper' (systematic triggers), 'design-thinking' (human-centered), 'lateral' (unexpected connections), 'auto' (AI selects best)"),
-  domain: z.string().optional().describe("Domain context for specialized brainstorming (e.g., 'software', 'business', 'creative', 'research', 'product', 'marketing')"),
-  constraints: z.string().optional().describe("Known limitations, requirements, or boundaries (budget, time, technical, legal, etc.)"),
-  existingContext: z.string().optional().describe("Background information, previous attempts, or current state to build upon"),
-  ideaCount: z.number().int().positive().default(12).describe("Target number of ideas to generate (default: 10-15)"),
-  includeAnalysis: z.boolean().default(true).describe("Include feasibility, impact, and implementation analysis for generated ideas"),
+  prompt: z
+    .string()
+    .min(1)
+    .describe('Primary brainstorming challenge or question to explore'),
+  model: z
+    .string()
+    .optional()
+    .describe(
+      "Optional model to use (e.g., 'gemini-3-flash-preview'). If not specified, uses the default model (gemini-3-pro-preview)."
+    ),
+  methodology: z
+    .enum([
+      'divergent',
+      'convergent',
+      'scamper',
+      'design-thinking',
+      'lateral',
+      'auto',
+    ])
+    .default('auto')
+    .describe(
+      "Brainstorming framework: 'divergent' (generate many ideas), 'convergent' (refine existing), 'scamper' (systematic triggers), 'design-thinking' (human-centered), 'lateral' (unexpected connections), 'auto' (AI selects best)"
+    ),
+  domain: z
+    .string()
+    .optional()
+    .describe(
+      "Domain context for specialized brainstorming (e.g., 'software', 'business', 'creative', 'research', 'product', 'marketing')"
+    ),
+  constraints: z
+    .string()
+    .optional()
+    .describe(
+      'Known limitations, requirements, or boundaries (budget, time, technical, legal, etc.)'
+    ),
+  existingContext: z
+    .string()
+    .optional()
+    .describe(
+      'Background information, previous attempts, or current state to build upon'
+    ),
+  ideaCount: z
+    .number()
+    .int()
+    .positive()
+    .default(12)
+    .describe('Target number of ideas to generate (default: 10-15)'),
+  includeAnalysis: z
+    .boolean()
+    .default(true)
+    .describe(
+      'Include feasibility, impact, and implementation analysis for generated ideas'
+    ),
 });
 
 export const brainstormTool: UnifiedTool = {
-  name: "brainstorm",
-  description: "Generate novel ideas with dynamic context gathering. --> Creative frameworks (SCAMPER, Design Thinking, etc.), domain context integration, idea clustering, feasibility analysis, and iterative refinement.",
+  name: 'brainstorm',
+  description:
+    'Generate creative ideas using structured frameworks (SCAMPER, Design Thinking, etc.) with domain context, feasibility analysis, and iterative refinement.',
   zodSchema: brainstormArgsSchema,
+  inputSchema: {
+    type: 'object',
+    properties: {
+      prompt: {
+        type: 'string',
+        description: 'Primary brainstorming challenge or question to explore',
+      },
+      model: {
+        type: 'string',
+        description:
+          "Optional model to use (e.g., 'gemini-3-flash-preview'). If not specified, uses the default model (gemini-3-pro-preview).",
+      },
+      methodology: {
+        type: 'string',
+        enum: [
+          'divergent',
+          'convergent',
+          'scamper',
+          'design-thinking',
+          'lateral',
+          'auto',
+        ],
+        default: 'auto',
+        description:
+          "Brainstorming framework: 'divergent' (generate many ideas), 'convergent' (refine existing), 'scamper' (systematic triggers), 'design-thinking' (human-centered), 'lateral' (unexpected connections), 'auto' (AI selects best)",
+      },
+      domain: {
+        type: 'string',
+        description:
+          "Domain context for specialized brainstorming (e.g., 'software', 'business', 'creative', 'research', 'product', 'marketing')",
+      },
+      constraints: {
+        type: 'string',
+        description:
+          'Known limitations, requirements, or boundaries (budget, time, technical, legal, etc.)',
+      },
+      existingContext: {
+        type: 'string',
+        description:
+          'Background information, previous attempts, or current state to build upon',
+      },
+      ideaCount: {
+        type: 'integer',
+        default: 12,
+        description: 'Target number of ideas to generate (default: 10-15)',
+      },
+      includeAnalysis: {
+        type: 'boolean',
+        default: true,
+        description:
+          'Include feasibility, impact, and implementation analysis for generated ideas',
+      },
+    },
+    required: ['prompt'],
+  },
   prompt: {
-    description: "Generate structured brainstorming prompt with methodology-driven ideation, domain context integration, and analytical evaluation framework",
+    description:
+      'Generate creative ideas using structured brainstorming methodologies.',
   },
   category: 'gemini',
   execute: async (args, onProgress) => {
@@ -143,11 +260,13 @@ export const brainstormTool: UnifiedTool = {
       constraints,
       existingContext,
       ideaCount = 12,
-      includeAnalysis = true
+      includeAnalysis = true,
     } = args;
 
     if (!prompt?.trim()) {
-      throw new Error("You must provide a valid brainstorming challenge or question to explore");
+      throw new Error(
+        'You must provide a valid brainstorming challenge or question to explore'
+      );
     }
 
     let enhancedPrompt = buildBrainstormPrompt({
@@ -157,15 +276,25 @@ export const brainstormTool: UnifiedTool = {
       constraints: constraints as string | undefined,
       existingContext: existingContext as string | undefined,
       ideaCount: ideaCount as number,
-      includeAnalysis: includeAnalysis as boolean
+      includeAnalysis: includeAnalysis as boolean,
     });
 
-    Logger.debug(`Brainstorm: Using methodology '${methodology}' for domain '${domain || 'general'}'`);
-    
+    Logger.debug(
+      `Brainstorm: Using methodology '${methodology}' for domain '${domain || 'general'}'`
+    );
+
     // Report progress to user
-    onProgress?.(`Generating ${ideaCount} ideas via ${methodology} methodology...`);
-    
+    onProgress?.(
+      `Generating ${ideaCount} ideas via ${methodology} methodology...`
+    );
+
     // Execute with Gemini
-    return await executeGeminiCLI(enhancedPrompt, model as string | undefined, false, false, onProgress);
-  }
+    return await executeGeminiCLI(
+      enhancedPrompt,
+      model as string | undefined,
+      false,
+      false,
+      onProgress
+    );
+  },
 };

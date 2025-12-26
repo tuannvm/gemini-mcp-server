@@ -8,7 +8,7 @@ import type { ToolArguments, ServerConfig } from '../types.js';
 describe('Type Definitions', () => {
   describe('TOOLS constant', () => {
     test('should define tool names', () => {
-      expect(TOOLS.ASK_GEMINI).toBe('ask-gemini');
+      expect(TOOLS.GEMINI).toBe('gemini');
       expect(TOOLS.PING).toBe('ping');
       expect(TOOLS.HELP).toBe('help');
       expect(TOOLS.BRAINSTORM).toBe('brainstorm');

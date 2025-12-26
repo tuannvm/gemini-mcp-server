@@ -49,13 +49,13 @@ describe('Gemini MCP Server', () => {
       });
     });
 
-    test('should include ask-gemini tool', async () => {
+    test('should include gemini tool', async () => {
       const { getToolDefinitions } = await import('../tools/index.js');
       const tools = getToolDefinitions();
 
-      const askGemini = tools.find((t) => t.name === 'ask-gemini');
-      expect(askGemini).toBeDefined();
-      expect(askGemini?.description).toContain('model');
+      const geminiTool = tools.find((t) => t.name === 'gemini');
+      expect(geminiTool).toBeDefined();
+      expect(geminiTool?.description).toContain('Gemini');
     });
   });
 
@@ -63,9 +63,9 @@ describe('Gemini MCP Server', () => {
     test('should return true for existing tools', async () => {
       const { toolExists } = await import('../tools/index.js');
 
-      expect(toolExists('ask-gemini')).toBe(true);
+      expect(toolExists('gemini')).toBe(true);
       expect(toolExists('ping')).toBe(true);
-      expect(toolExists('Help')).toBe(true);
+      expect(toolExists('help')).toBe(true);
     });
 
     test('should return false for non-existing tools', async () => {

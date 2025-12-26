@@ -3,34 +3,50 @@ import { UnifiedTool } from './registry.js';
 import { executeCommand } from '../utils/commandExecutor.js';
 
 const pingArgsSchema = z.object({
-  prompt: z.string().default('').describe("Message to echo "),
+  prompt: z.string().default('').describe('Message to echo '),
 });
 
 export const pingTool: UnifiedTool = {
-  name: "ping",
-  description: "Echo",
+  name: 'ping',
+  description: 'Test connectivity by echoing a message back.',
   zodSchema: pingArgsSchema,
+  inputSchema: {
+    type: 'object',
+    properties: {
+      prompt: {
+        type: 'string',
+        default: '',
+        description: 'Message to echo',
+      },
+    },
+    required: [],
+  },
   prompt: {
-    description: "Echo test message with structured response.",
+    description: 'Echo a test message to verify connectivity.',
   },
   category: 'simple',
   execute: async (args, onProgress) => {
-    const message = args.prompt || args.message || "Pong!";
-    return executeCommand("echo", [message as string], onProgress);
-  }
+    const message = args.prompt || args.message || 'Pong!';
+    return executeCommand('echo', [message as string], onProgress);
+  },
 };
 
 const helpArgsSchema = z.object({});
 
 export const helpTool: UnifiedTool = {
-  name: "Help",
-  description: "receive help information",
+  name: 'help',
+  description: 'Display Gemini CLI help and available options.',
   zodSchema: helpArgsSchema,
+  inputSchema: {
+    type: 'object',
+    properties: {},
+    required: [],
+  },
   prompt: {
-    description: "receive help information",
+    description: 'Display Gemini CLI help information.',
   },
   category: 'simple',
-  execute: async (args, onProgress) => {
-    return executeCommand("gemini", ["-help"], onProgress);
-  }
+  execute: async (_args, onProgress) => {
+    return executeCommand('gemini', ['-help'], onProgress);
+  },
 };

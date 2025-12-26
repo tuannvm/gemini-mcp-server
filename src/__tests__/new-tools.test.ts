@@ -16,11 +16,11 @@ jest.mock('chalk', () => ({
 
 describe('New Tools', () => {
   describe('Tool Definitions', () => {
-    test('should include search tool', async () => {
+    test('should include web-search tool', async () => {
       const { getToolDefinitions } = await import('../tools/index.js');
       const tools = getToolDefinitions();
 
-      const searchTool = tools.find((t) => t.name === 'search');
+      const searchTool = tools.find((t) => t.name === 'web-search');
       expect(searchTool).toBeDefined();
       expect(searchTool?.description).toContain('Search');
     });
@@ -48,18 +48,18 @@ describe('New Tools', () => {
     test('should recognize new tools', async () => {
       const { toolExists } = await import('../tools/index.js');
 
-      expect(toolExists('search')).toBe(true);
+      expect(toolExists('web-search')).toBe(true);
       expect(toolExists('analyze-media')).toBe(true);
       expect(toolExists('shell')).toBe(true);
     });
   });
 
-  describe('Search Tool Schema', () => {
+  describe('Web Search Tool Schema', () => {
     test('should have required query parameter', async () => {
       const { getToolDefinitions } = await import('../tools/index.js');
       const tools = getToolDefinitions();
 
-      const searchTool = tools.find((t) => t.name === 'search');
+      const searchTool = tools.find((t) => t.name === 'web-search');
       expect(searchTool?.inputSchema.properties).toHaveProperty('query');
       expect(searchTool?.inputSchema.required).toContain('query');
     });
@@ -68,7 +68,7 @@ describe('New Tools', () => {
       const { getToolDefinitions } = await import('../tools/index.js');
       const tools = getToolDefinitions();
 
-      const searchTool = tools.find((t) => t.name === 'search');
+      const searchTool = tools.find((t) => t.name === 'web-search');
       expect(searchTool?.inputSchema.properties).toHaveProperty('summarize');
     });
   });
@@ -79,7 +79,9 @@ describe('New Tools', () => {
       const tools = getToolDefinitions();
 
       const analyzeMediaTool = tools.find((t) => t.name === 'analyze-media');
-      expect(analyzeMediaTool?.inputSchema.properties).toHaveProperty('filePath');
+      expect(analyzeMediaTool?.inputSchema.properties).toHaveProperty(
+        'filePath'
+      );
       expect(analyzeMediaTool?.inputSchema.properties).toHaveProperty('prompt');
       expect(analyzeMediaTool?.inputSchema.required).toContain('filePath');
       expect(analyzeMediaTool?.inputSchema.required).toContain('prompt');
@@ -90,7 +92,9 @@ describe('New Tools', () => {
       const tools = getToolDefinitions();
 
       const analyzeMediaTool = tools.find((t) => t.name === 'analyze-media');
-      expect(analyzeMediaTool?.inputSchema.properties).toHaveProperty('detailed');
+      expect(analyzeMediaTool?.inputSchema.properties).toHaveProperty(
+        'detailed'
+      );
     });
   });
 
@@ -117,7 +121,9 @@ describe('New Tools', () => {
       const tools = getToolDefinitions();
 
       const shellTool = tools.find((t) => t.name === 'shell');
-      expect(shellTool?.inputSchema.properties).toHaveProperty('workingDirectory');
+      expect(shellTool?.inputSchema.properties).toHaveProperty(
+        'workingDirectory'
+      );
     });
   });
 
@@ -126,7 +132,7 @@ describe('New Tools', () => {
       const { getToolDefinitions } = await import('../tools/index.js');
       const tools = getToolDefinitions();
 
-      // ask-gemini, search, analyze-media, shell, brainstorm, fetch-chunk, ping, help, timeout-test
+      // gemini, web-search, analyze-media, shell, brainstorm, fetch-chunk, ping, help, timeout-test
       expect(tools.length).toBe(9);
     });
   });

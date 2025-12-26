@@ -34,8 +34,8 @@ export type ProgressCallback = (newOutput: string) => void;
 
 // Tool constants
 export const TOOLS = {
-  ASK_GEMINI: 'ask-gemini',
-  SEARCH: 'search',
+  GEMINI: 'gemini',
+  WEB_SEARCH: 'web-search',
   ANALYZE_MEDIA: 'analyze-media',
   SHELL: 'shell',
   BRAINSTORM: 'brainstorm',
