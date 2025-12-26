@@ -28,7 +28,7 @@ export const fetchChunkTool: UnifiedTool = {
   
   category: 'utility',
   
-  execute: async (args: any, onProgress?: (newOutput: string) => void): Promise<string> => {
+  execute: async (args: any, _onProgress?: (newOutput: string) => void): Promise<string> => {
     const { cacheKey, chunkIndex } = args;
     
     Logger.toolInvocation('fetch-chunk', args);

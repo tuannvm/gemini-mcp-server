@@ -13,7 +13,7 @@ export function parseChangeModeOutput(geminiResponse: string): ChangeModeEdit[] 
 
   let match;
   while ((match = markdownPattern.exec(geminiResponse)) !== null) {
-    const [_fullMatch, filename, startLineStr, oldCodeRaw, newCodeRaw] = match;
+    const [, filename, startLineStr, oldCodeRaw, newCodeRaw] = match;
 
     const oldCode = oldCodeRaw.trimEnd();
     const newCode = newCodeRaw.trimEnd();
@@ -43,7 +43,7 @@ export function parseChangeModeOutput(geminiResponse: string): ChangeModeEdit[] 
 
     while ((match = editPattern.exec(geminiResponse)) !== null) {
       const [
-        _fullMatch,
+        ,
         oldFilename,
         oldStartLine,
         oldCode,

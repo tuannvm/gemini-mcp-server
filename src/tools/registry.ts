@@ -28,7 +28,8 @@ export function toolExists(toolName: string): boolean {
 }
 export function getToolDefinitions(): Tool[] { // get Tool definitions from registry
   return toolRegistry.map(tool => {
-    const raw = zodToJsonSchema(tool.zodSchema, tool.name) as any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const raw = zodToJsonSchema(tool.zodSchema as any, tool.name) as any;
     const def = raw.definitions?.[tool.name] ?? raw;
     const inputSchema: Tool['inputSchema'] = {
       type: "object",
@@ -45,9 +46,10 @@ export function getToolDefinitions(): Tool[] { // get Tool definitions from regi
 }
 
 function extractPromptArguments(zodSchema: ZodTypeAny): Array<{name: string; description: string; required: boolean}> {
-  const jsonSchema = zodToJsonSchema(zodSchema) as any;
-  const properties = jsonSchema.properties || {};
-  const required = jsonSchema.required || [];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const jsonSchema = zodToJsonSchema(zodSchema as any, 'schema') as Record<string, unknown>;
+  const properties = (jsonSchema.properties || {}) as Record<string, unknown>;
+  const required = (jsonSchema.required || []) as string[];
   
   return Object.entries(properties).map(([name, prop]: [string, any]) => ({
     name,
@@ -58,11 +60,11 @@ function extractPromptArguments(zodSchema: ZodTypeAny): Array<{name: string; des
 
 export function getPromptDefinitions(): Prompt[] { // Helper to get MCP Prompt definitions from registry
   return toolRegistry
-    .filter(tool => tool.prompt)
+    .filter((tool): tool is UnifiedTool & { prompt: NonNullable<UnifiedTool['prompt']> } => !!tool.prompt)
     .map(tool => ({
       name: tool.name,
-      description: tool.prompt!.description,
-      arguments: tool.prompt!.arguments || extractPromptArguments(tool.zodSchema),
+      description: tool.prompt.description,
+      arguments: tool.prompt.arguments || extractPromptArguments(tool.zodSchema),
     }));
 }
 
