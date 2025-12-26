@@ -1,75 +1,82 @@
+# Gemini MCP Server
 
-# Gemini MCP Tool
+[![npm version](https://img.shields.io/npm/v/gemini-mcp-tool.svg)](https://www.npmjs.com/package/gemini-mcp-tool)
+[![npm downloads](https://img.shields.io/npm/dm/gemini-mcp-tool.svg)](https://www.npmjs.com/package/gemini-mcp-tool)
+[![license](https://img.shields.io/npm/l/gemini-mcp-tool.svg)](https://www.npmjs.com/package/gemini-mcp-tool)
 
-<div align="center">
+MCP server for Google Gemini CLI integration with large file analysis, web search, multimodal analysis, shell commands, and brainstorming support.
 
-[![GitHub Release](https://img.shields.io/github/v/release/jamubc/gemini-mcp-tool?logo=github&label=GitHub)](https://github.com/jamubc/gemini-mcp-tool/releases)
-[![npm version](https://img.shields.io/npm/v/gemini-mcp-tool)](https://www.npmjs.com/package/gemini-mcp-tool)
-[![npm downloads](https://img.shields.io/npm/dt/gemini-mcp-tool)](https://www.npmjs.com/package/gemini-mcp-tool)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Open Source](https://img.shields.io/badge/Open%20Source-❤️-red.svg)](https://github.com/jamubc/gemini-mcp-tool)
+```mermaid
+graph LR
+    A[Claude Code] --> B[Gemini MCP Server]
 
-</div>
+    B --> C[ask-gemini]
+    B --> S[search]
+    B --> M[analyze-media]
+    B --> SH[shell]
+    B --> D[brainstorm]
+    B --> E[fetch-chunk]
+    B --> F[ping]
+    B --> G[help]
 
-> 📚 **[View Full Documentation](https://jamubc.github.io/gemini-mcp-tool/)** - Search me!, Examples, FAQ, Troubleshooting, Best Practices
+    C --> H[Gemini CLI]
+    S --> H
+    M --> H
+    SH --> H
+    D --> H
+    C --> I[Chunk Cache]
+    E --> I
 
-This is a simple Model Context Protocol (MCP) server that allows AI assistants to interact with the [Gemini CLI](https://github.com/google-gemini/gemini-cli). It enables the AI to leverage the power of Gemini's massive token window for large analysis, especially with large files and codebases using the `@` syntax for direction.
-
-- Ask gemini natural questions, through claude or Brainstorm new ideas in a party of 3!
-
-<a href="https://glama.ai/mcp/servers/@jamubc/gemini-mcp-tool">
-  <img width="380" height="200" src="https://glama.ai/mcp/servers/@jamubc/gemini-mcp-tool/badge" alt="Gemini Tool MCP server" />
-</a>
-
-## TLDR: [![Claude](https://img.shields.io/badge/Claude-D97757?logo=claude&logoColor=fff)](#) + [![Google Gemini](https://img.shields.io/badge/Google%20Gemini-886FBF?logo=googlegemini&logoColor=fff)](#)
-
-
-**Goal**: Use Gemini's powerful analysis capabilities directly in Claude Code to save tokens and analyze large files.
+    style A fill:#FF6B35
+    style B fill:#4A90E2
+    style C fill:#00D4AA
+    style S fill:#00D4AA
+    style M fill:#00D4AA
+    style SH fill:#00D4AA
+    style D fill:#00D4AA
+    style E fill:#00D4AA
+    style F fill:#00D4AA
+    style G fill:#00D4AA
+    style H fill:#4285F4
+    style I fill:#9B59B6
+```
 
 ## Prerequisites
 
-Before using this tool, ensure you have:
+- **Google Gemini CLI v0.22.2+** must be pre-installed and configured
+  - Install: `npm install -g @google/gemini-cli`
+  - Authenticate: Run `gemini` and login with Google (free tier: 60 req/min, 1000 req/day)
+  - Or set API key: `export GEMINI_API_KEY="YOUR_API_KEY"`
+  - **Recommended**: Set default model to Gemini 3 Pro (see [Model Configuration](#model-configuration))
+- **Node.js v18+** installed
+- **Claude Code** or compatible MCP client
 
-1. **[Node.js](https://nodejs.org/)** (v16.0.0 or higher)
-2. **[Google Gemini CLI](https://github.com/google-gemini/gemini-cli)** installed and configured
+## Installation
 
+### One-Click Installation
 
-### One-Line Setup
+#### VS Code
+[![Install in VS Code](https://img.shields.io/badge/VS_Code-Install_Gemini_MCP_Server-0098FF?style=flat-square&logo=visualstudiocode&logoColor=white)](https://vscode.dev/redirect/mcp/install?name=gemini-cli&config=%7B%22type%22%3A%22stdio%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22gemini-mcp-tool%22%5D%7D)
 
+#### VS Code Insiders
+[![Install in VS Code Insiders](https://img.shields.io/badge/VS_Code_Insiders-Install_Gemini_MCP_Server-24bfa5?style=flat-square&logo=visualstudiocode&logoColor=white)](https://insiders.vscode.dev/redirect/mcp/install?name=gemini-cli&config=%7B%22type%22%3A%22stdio%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22gemini-mcp-tool%22%5D%7D)
+
+#### Cursor
+[![Install in Cursor](https://img.shields.io/badge/Cursor-Install_Gemini_MCP_Server-00D8FF?style=flat-square&logo=cursor&logoColor=white)](https://cursor.com/en/install-mcp?name=gemini-cli&config=eyJ0eXBlIjoic3RkaW8iLCJjb21tYW5kIjoibnB4IC15IGdlbWluaS1tY3AtdG9vbCIsImVudiI6e319)
+
+### Manual Installation
+
+#### Claude Code
 ```bash
 claude mcp add gemini-cli -- npx -y gemini-mcp-tool
 ```
 
-### Verify Installation
+#### Claude Desktop
+Add to your Claude Desktop configuration file:
 
-Type `/mcp` inside Claude Code to verify the gemini-cli MCP is active.
+**macOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`
 
----
-
-### Alternative: Import from Claude Desktop
-
-If you already have it configured in Claude Desktop:
-
-1. Add to your Claude Desktop config:
-```json
-"gemini-cli": {
-  "command": "npx",
-  "args": ["-y", "gemini-mcp-tool"]
-}
-```
-
-2. Import to Claude Code:
-```bash
-claude mcp add-from-claude-desktop
-```
-
-## Configuration
-
-Register the MCP server with your MCP client:
-
-### For NPX Usage (Recommended)
-
-Add this configuration to your Claude Desktop config file:
+**Windows:** `%APPDATA%/Claude/claude_desktop_config.json`
 
 ```json
 {
@@ -82,89 +89,293 @@ Add this configuration to your Claude Desktop config file:
 }
 ```
 
-### For Global Installation
+## Usage in Claude Code
 
-If you installed globally, use this configuration instead:
+Once installed, Claude Code can use these tools:
 
+### `ask-gemini` - File Analysis & Questions
+Analyze files and codebases using Gemini's large context window with the `@` syntax.
+
+**Basic Usage:**
+```
+Use ask-gemini to analyze @src/main.js and explain what it does
+```
+
+**Advanced Usage:**
+```
+# Model selection (defaults to gemini-3-pro-preview)
+Use ask-gemini with model "gemini-3-flash-preview" to quickly summarize @package.json
+
+# Sandbox mode for safe code execution
+Use ask-gemini with sandbox true to test @script.py safely
+
+# Change mode for structured edits
+Use ask-gemini with changeMode true to refactor @src/utils.ts
+```
+
+**Parameters:**
+- `prompt` (required): Your question or analysis request. Use `@` syntax for file references
+- `model` (optional): Model to use (`gemini-3-pro-preview` or `gemini-3-flash-preview`)
+- `sandbox` (optional): Enable sandbox mode for safe execution
+- `changeMode` (optional): Enable structured edit mode for code changes
+
+### `search` - Web Search with Google Grounding
+Search the web using Gemini with Google Search grounding for real-time information.
+
+**Basic Usage:**
+```
+Use search to find the latest React 19 features
+```
+
+**Advanced Usage:**
+```
+# Get raw results without summarization
+Use search with query "kubernetes security best practices 2025" and summarize false
+
+# Use specific model
+Use search with query "latest AI news" and model "gemini-3-pro-preview"
+```
+
+**Parameters:**
+- `query` (required): Search query
+- `summarize` (optional): Summarize results (default: true)
+- `model` (optional): Model to use (default: gemini-3-flash-preview for speed)
+
+### `analyze-media` - Multimodal Analysis
+Analyze images, PDFs, screenshots, and diagrams using Gemini's multimodal capabilities.
+
+**Basic Usage:**
+```
+Use analyze-media with filePath "@screenshot.png" and prompt "describe this UI"
+```
+
+**Advanced Usage:**
+```
+# Detailed analysis
+Use analyze-media with filePath "@architecture.pdf" and prompt "explain the system design" and detailed true
+
+# Quick analysis with Flash model
+Use analyze-media with filePath "@error.png" and prompt "what's the error?" and model "gemini-3-flash-preview"
+```
+
+**Parameters:**
+- `filePath` (required): Path to media file (use `@` syntax)
+- `prompt` (required): What to analyze or extract
+- `model` (optional): Model to use (default: gemini-3-pro-preview for multimodal)
+- `detailed` (optional): Provide detailed analysis
+
+### `shell` - Shell Command Generation
+Generate and optionally execute shell commands using Gemini.
+
+**Basic Usage:**
+```
+Use shell with task "find all TypeScript files larger than 100KB"
+```
+
+**Advanced Usage:**
+```
+# Dry run (default) - explains commands without executing
+Use shell with task "clean up node_modules and rebuild" and dryRun true
+
+# Execute in sandbox (safe)
+Use shell with task "run the test suite" and dryRun false
+
+# With working directory
+Use shell with task "list all TODO comments" and workingDirectory "@src/"
+```
+
+**Parameters:**
+- `task` (required): Description of the shell task
+- `dryRun` (optional): If true, explains commands without executing (default: true)
+- `workingDirectory` (optional): Working directory for execution
+- `model` (optional): Model to use (default: gemini-3-flash-preview)
+
+### `brainstorm` - Creative Ideation
+Generate ideas using various brainstorming methodologies.
+
+**Basic Usage:**
+```
+Use brainstorm to generate ideas for improving user onboarding
+```
+
+**Advanced Usage:**
+```
+# Specific methodology
+Use brainstorm with methodology "SCAMPER" to improve the checkout flow
+
+# Domain-specific brainstorming
+Use brainstorm with domain "mobile" and ideaCount 10 for app features
+
+# With analysis
+Use brainstorm with includeAnalysis true to evaluate idea feasibility
+```
+
+**Parameters:**
+- `prompt` (required): The brainstorming topic
+- `methodology` (optional): Framework to use (`divergent`, `convergent`, `SCAMPER`, `design-thinking`, `lateral`, `auto`)
+- `domain` (optional): Domain context for specialized ideas
+- `constraints` (optional): Known limitations or requirements
+- `ideaCount` (optional): Target number of ideas to generate
+- `includeAnalysis` (optional): Include feasibility and impact analysis
+
+### `fetch-chunk` - Retrieve Cached Chunks
+Retrieve cached chunks from large changeMode responses.
+
+**Parameters:**
+- `cacheKey` (required): Cache key from previous response
+- `chunkIndex` (required): Chunk index to retrieve (1-based)
+
+### `ping` - Connection Test
+Test if the MCP server is working properly.
+
+### `help` - Gemini CLI Help
+Get information about Gemini CLI capabilities and commands.
+
+## Example Workflows
+
+**Large Codebase Analysis:**
+```
+Use ask-gemini to analyze @. and provide an architecture overview
+```
+
+**File Comparison:**
+```
+Use ask-gemini to compare @src/old.ts and @src/new.ts and explain the differences
+```
+
+**Code Refactoring with Structured Edits:**
+```
+Use ask-gemini with changeMode true to refactor @src/utils.ts for better error handling
+```
+
+**Creative Brainstorming:**
+```
+Use brainstorm with methodology "design-thinking" to improve the user dashboard experience
+```
+
+**Web Research:**
+```
+Use search to find the latest security vulnerabilities in npm packages
+```
+
+**Screenshot Analysis:**
+```
+Use analyze-media with filePath "@error-screenshot.png" and prompt "explain this error and suggest a fix"
+```
+
+**Shell Task Automation:**
+```
+Use shell with task "find all files modified in the last 24 hours" and dryRun false
+```
+
+## Advanced Features
+
+### Large File Handling
+- Gemini's massive context window handles large files that would exceed other models' limits
+- Use `@` syntax to reference files: `@src/main.js`, `@.` (current directory)
+- Automatic chunking for very large responses with cache retrieval
+
+### Change Mode (Structured Edits)
+When `changeMode` is enabled, responses are formatted as structured edits that can be automatically applied:
+- Parses `**FILE: path:line**` format with `OLD/NEW` blocks
+- Chunks large edit responses for manageable processing
+- 10-minute cache TTL for chunk retrieval
+
+### Model Fallback
+- Automatically falls back from `gemini-3-pro-preview` to `gemini-3-flash-preview` when quota is exceeded
+- Transparent retry with status notification
+
+### Progress Notifications
+For long-running operations, the server sends `notifications/progress` messages when the client provides a `progressToken`.
+
+## Model Configuration
+
+### Setting the Default Model
+
+You can configure the default Gemini model using three methods (in order of precedence):
+
+**1. Environment Variable (Recommended)**
+```bash
+export GEMINI_MODEL="gemini-3-pro-preview"
+```
+
+**2. Settings File**
+
+Create `~/.gemini/settings.json` (user-level) or `.gemini/settings.json` (project-level):
 ```json
 {
-  "mcpServers": {
-    "gemini-cli": {
-      "command": "gemini-mcp"
-    }
+  "model": {
+    "name": "gemini-3-pro-preview"
   }
 }
 ```
 
-**Configuration File Locations:**
+**3. Command-Line Flag**
+```bash
+gemini -m gemini-3-pro-preview
+```
 
-- **Claude Desktop**:
-  - **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
-  - **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
-  - **Linux**: `~/.config/claude/claude_desktop_config.json`
+### Available Models
 
-After updating the configuration, restart your terminal session.
+| Model | ID | Best For |
+|-------|-----|----------|
+| **Gemini 3 Pro** (default) | `gemini-3-pro-preview` | Most capable, complex reasoning |
+| **Gemini 3 Flash** | `gemini-3-flash-preview` | Fast responses, good quality |
+| Gemini 2.5 Flash-Lite | `gemini-2.5-flash-lite` | Fastest, lightweight |
 
-## Example Workflow
+### Configuration Precedence
 
-- **Natural language**: "use gemini to explain index.html", "understand the massive project using gemini", "ask gemini to search for latest news"
-- **Claude Code**: Type `/gemini-cli` and commands will populate in Claude Code's interface.
+Settings are applied in order (highest priority last):
+1. Default values
+2. User settings file (`~/.gemini/settings.json`)
+3. Project settings file (`.gemini/settings.json`)
+4. Environment variables (`GEMINI_MODEL`)
+5. Command-line arguments (`-m`)
+6. MCP tool `model` parameter (overrides all)
 
-## Usage Examples
+### Recommended Setup
 
-### With File References (using @ syntax)
+For best results, set Gemini 3 Pro as your default:
 
-- `ask gemini to analyze @src/main.js and explain what it does`
-- `use gemini to summarize @. the current directory`
-- `analyze @package.json and tell me about dependencies`
+```bash
+# Add to your shell profile (~/.bashrc, ~/.zshrc, etc.)
+export GEMINI_MODEL="gemini-3-pro-preview"
+```
 
-### General Questions (without files)
+Or create a user settings file:
+```bash
+mkdir -p ~/.gemini
+echo '{"model": {"name": "gemini-3-pro-preview"}}' > ~/.gemini/settings.json
+```
 
-- `ask gemini to search for the latest tech news`
-- `use gemini to explain div centering`
-- `ask gemini about best practices for React development related to @file_im_confused_about`
+## Development
 
-### Using Gemini CLI's Sandbox Mode (-s)
+```bash
+# Install dependencies
+npm install
 
-The sandbox mode allows you to safely test code changes, run scripts, or execute potentially risky operations in an isolated environment.
+# Development mode
+npm run dev
 
-- `use gemini sandbox to create and run a Python script that processes data`
-- `ask gemini to safely test @script.py and explain what it does`
-- `use gemini sandbox to install numpy and create a data visualization`
-- `test this code safely: Create a script that makes HTTP requests to an API`
+# Build
+npm run build
 
-### Tools (for the AI)
+# Run tests
+npm test
 
-These tools are designed to be used by the AI assistant.
+# Lint and format
+npm run lint
+npm run format
+```
 
-- **`ask-gemini`**: Asks Google Gemini for its perspective. Can be used for general questions or complex analysis of files.
-  - **`prompt`** (required): The analysis request. Use the `@` syntax to include file or directory references (e.g., `@src/main.js explain this code`) or ask general questions (e.g., `Please use a web search to find the latest news stories`).
-  - **`model`** (optional): The Gemini model to use. Defaults to `gemini-2.5-pro`.
-  - **`sandbox`** (optional): Set to `true` to run in sandbox mode for safe code execution.
-- **`sandbox-test`**: Safely executes code or commands in Gemini's sandbox environment. Always runs in sandbox mode.
-  - **`prompt`** (required): Code testing request (e.g., `Create and run a Python script that...` or `@script.py Run this safely`).
-  - **`model`** (optional): The Gemini model to use.
-- **`Ping`**: A simple test tool that echoes back a message.
-- **`Help`**: Shows the Gemini CLI help text.
+## Documentation
 
-### Slash Commands (for the User)
-
-You can use these commands directly in Claude Code's interface (compatibility with other clients has not been tested).
-
-- **/analyze**: Analyzes files or directories using Gemini, or asks general questions.
-  - **`prompt`** (required): The analysis prompt. Use `@` syntax to include files (e.g., `/analyze prompt:@src/ summarize this directory`) or ask general questions (e.g., `/analyze prompt:Please use a web search to find the latest news stories`).
-- **/sandbox**: Safely tests code or scripts in Gemini's sandbox environment.
-  - **`prompt`** (required): Code testing request (e.g., `/sandbox prompt:Create and run a Python script that processes CSV data` or `/sandbox prompt:@script.py Test this script safely`).
-- **/help**: Displays the Gemini CLI help information.
-- **/ping**: Tests the connection to the server.
-  - **`message`** (optional): A message to echo back.
-
-## Contributing
-
-Contributions are welcome! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details on how to submit pull requests, report issues, and contribute to the project.
+- [API Reference](docs/api-reference.md)
+- [Gemini CLI Integration](docs/gemini-cli-integration.md)
+- [Full Documentation Site](https://jamubc.github.io/gemini-mcp-tool/)
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+MIT
 
 **Disclaimer:** This is an unofficial, third-party tool and is not affiliated with, endorsed, or sponsored by Google.

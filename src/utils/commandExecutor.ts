@@ -1,5 +1,5 @@
-import { spawn } from "child_process";
-import { Logger } from "./logger.js";
+import { spawn } from 'child_process';
+import { Logger } from './logger.js';
 
 export async function executeCommand(
   command: string,
@@ -13,17 +13,17 @@ export async function executeCommand(
     const childProcess = spawn(command, args, {
       env: process.env,
       shell: false,
-      stdio: ["ignore", "pipe", "pipe"],
+      stdio: ['ignore', 'pipe', 'pipe'],
     });
 
-    let stdout = "";
-    let stderr = "";
+    let stdout = '';
+    let stderr = '';
     let isResolved = false;
     let lastReportedLength = 0;
-    
-    childProcess.stdout.on("data", (data) => {
+
+    childProcess.stdout.on('data', (data) => {
       stdout += data.toString();
-      
+
       // Report new content if callback provided
       if (onProgress && stdout.length > lastReportedLength) {
         const newContent = stdout.substring(lastReportedLength);
@@ -32,18 +32,19 @@ export async function executeCommand(
       }
     });
 
-
     // CLI level errors
-    childProcess.stderr.on("data", (data) => {
+    childProcess.stderr.on('data', (data) => {
       stderr += data.toString();
-      // find RESOURCE_EXHAUSTED when gemini-2.5-pro quota is exceeded
-      if (stderr.includes("RESOURCE_EXHAUSTED")) {
-        const modelMatch = stderr.match(/Quota exceeded for quota metric '([^']+)'/);
+      // find RESOURCE_EXHAUSTED when gemini-3-pro quota is exceeded
+      if (stderr.includes('RESOURCE_EXHAUSTED')) {
+        const modelMatch = stderr.match(
+          /Quota exceeded for quota metric '([^']+)'/
+        );
         const statusMatch = stderr.match(/status["\s]*[:=]\s*(\d+)/);
         const reasonMatch = stderr.match(/"reason":\s*"([^"]+)"/);
-        const model = modelMatch ? modelMatch[1] : "Unknown Model";
-        const status = statusMatch ? statusMatch[1] : "429";
-        const reason = reasonMatch ? reasonMatch[1] : "rateLimitExceeded";
+        const model = modelMatch ? modelMatch[1] : 'Unknown Model';
+        const status = statusMatch ? statusMatch[1] : '429';
+        const reason = reasonMatch ? reasonMatch[1] : 'rateLimitExceeded';
         const errorJson = {
           error: {
             code: parseInt(status),
@@ -51,21 +52,24 @@ export async function executeCommand(
             details: {
               model: model,
               reason: reason,
-              statusText: "Too Many Requests -- > try using gemini-2.5-flash by asking",
-            }
-          }
+              statusText:
+                'Too Many Requests -- > try using gemini-3-flash-preview by asking',
+            },
+          },
         };
-        Logger.error(`Gemini Quota Error: ${JSON.stringify(errorJson, null, 2)}`);
+        Logger.error(
+          `Gemini Quota Error: ${JSON.stringify(errorJson, null, 2)}`
+        );
       }
     });
-    childProcess.on("error", (error) => {
+    childProcess.on('error', (error) => {
       if (!isResolved) {
         isResolved = true;
         Logger.error(`Process error:`, error);
         reject(new Error(`Failed to spawn command: ${error.message}`));
       }
     });
-    childProcess.on("close", (code) => {
+    childProcess.on('close', (code) => {
       if (!isResolved) {
         isResolved = true;
         if (code === 0) {
@@ -74,9 +78,9 @@ export async function executeCommand(
         } else {
           Logger.commandComplete(startTime, code);
           Logger.error(`Failed with exit code ${code}`);
-          const errorMessage = stderr.trim() || "Unknown error";
+          const errorMessage = stderr.trim() || 'Unknown error';
           reject(
-            new Error(`Command failed with exit code ${code}: ${errorMessage}`),
+            new Error(`Command failed with exit code ${code}: ${errorMessage}`)
           );
         }
       }
