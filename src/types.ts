@@ -29,6 +29,15 @@ export interface ServerConfig {
   version: string;
 }
 
+// Tool annotations for MCP 2025-11-25 spec
+export interface ToolAnnotations {
+  title?: string;
+  readOnlyHint?: boolean;
+  destructiveHint?: boolean;
+  idempotentHint?: boolean;
+  openWorldHint?: boolean;
+}
+
 // Progress callback type
 export type ProgressCallback = (newOutput: string) => void;
 

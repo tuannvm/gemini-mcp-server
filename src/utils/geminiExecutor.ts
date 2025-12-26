@@ -89,9 +89,8 @@ ${prompt_processed}
   }
 
   const args = [];
-  if (model) {
-    args.push(CLI.FLAGS.MODEL, model);
-  }
+  // Always set model explicitly, default to PRO if not specified
+  args.push(CLI.FLAGS.MODEL, model || MODELS.PRO);
   if (sandbox) {
     args.push(CLI.FLAGS.SANDBOX);
   }

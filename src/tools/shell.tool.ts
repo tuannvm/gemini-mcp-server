@@ -34,6 +34,13 @@ export const shellTool: UnifiedTool = {
   description:
     'Generate and optionally execute shell commands using Gemini. By default runs in dry-run mode (explains commands). Set dryRun=false to execute in sandbox.',
   zodSchema: shellArgsSchema,
+  annotations: {
+    title: 'Shell Commands',
+    readOnlyHint: false,
+    destructiveHint: true,
+    idempotentHint: false,
+    openWorldHint: true,
+  },
   inputSchema: {
     type: 'object',
     properties: {

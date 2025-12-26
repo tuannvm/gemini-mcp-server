@@ -24,6 +24,13 @@ export const searchTool: UnifiedTool = {
   description:
     'Search the web using Gemini with Google Search grounding for real-time information.',
   zodSchema: searchArgsSchema,
+  annotations: {
+    title: 'Web Search',
+    readOnlyHint: true,
+    destructiveHint: false,
+    idempotentHint: false,
+    openWorldHint: true,
+  },
   inputSchema: {
     type: 'object',
     properties: {

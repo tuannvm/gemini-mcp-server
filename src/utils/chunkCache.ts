@@ -143,8 +143,8 @@ function enforceFileLimits(): void {
         try {
           fs.unlinkSync(file.path);
         } catch {
-      // Ignore cleanup errors
-    }
+          // Ignore cleanup errors
+        }
       }
       Logger.debug(
         `Removed ${toRemove.length} old cache files to enforce limit`

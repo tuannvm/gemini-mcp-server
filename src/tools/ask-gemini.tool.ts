@@ -46,6 +46,13 @@ export const askGeminiTool: UnifiedTool = {
   description:
     'Query Gemini AI. Supports model selection, sandbox mode for safe code execution, and structured change mode for applying edits.',
   zodSchema: askGeminiArgsSchema,
+  annotations: {
+    title: 'Query Gemini AI',
+    readOnlyHint: false,
+    destructiveHint: true,
+    idempotentHint: false,
+    openWorldHint: true,
+  },
   inputSchema: {
     type: 'object',
     properties: {
