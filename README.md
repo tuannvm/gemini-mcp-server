@@ -118,6 +118,10 @@ npm test       # Run tests
 
 Inspired by [gemini-mcp-tool](https://github.com/jamubc/gemini-mcp-tool).
 
+## Related Projects
+
+- **[codex-mcp-server](https://github.com/tuannvm/codex-mcp-server)** — MCP server for OpenAI Codex CLI with AI-powered code analysis and review
+
 ## License
 
 MIT — This is an unofficial tool, not affiliated with Google.
