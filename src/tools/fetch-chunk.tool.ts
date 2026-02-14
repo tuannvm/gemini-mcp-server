@@ -10,11 +10,15 @@ import { Logger } from '../utils/logger.js';
 const fetchChunkArgsSchema = z.object({
   cacheKey: z
     .string()
-    .describe('The cache key provided in the initial changeMode response'),
+    .describe(
+      'Cache key from a previous changeMode response. REQUIRED. This key was provided in the initial response that contained "Chunk 1 of N". Copy it exactly from that response. Cache expires after 10 minutes.'
+    ),
   chunkIndex: z
     .number()
     .min(1)
-    .describe('Which chunk to retrieve (1-based index)'),
+    .describe(
+      'Chunk number to retrieve. REQUIRED. Use 1-based indexing (1, 2, 3...). If previous response said "Chunk 1 of 5", request chunkIndex=2 for the next chunk. Valid range is 1 to totalChunks.'
+    ),
 });
 
 export const fetchChunkTool: UnifiedTool = {
@@ -35,11 +39,12 @@ export const fetchChunkTool: UnifiedTool = {
       cacheKey: {
         type: 'string',
         description:
-          'The cache key provided in the initial changeMode response',
+          'Cache key from a previous changeMode response. REQUIRED. Copy exactly from the response that contained "Chunk 1 of N". Cache expires after 10 minutes.',
       },
       chunkIndex: {
         type: 'number',
-        description: 'Which chunk to retrieve (1-based index)',
+        description:
+          'Chunk number to retrieve. REQUIRED. Use 1-based indexing (1, 2, 3...). If response said "Chunk 1 of 5", request chunkIndex=2 for next chunk.',
       },
     },
     required: ['cacheKey', 'chunkIndex'],

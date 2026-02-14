@@ -103,10 +103,56 @@ gemini "Analyze @src/main.js"
 When `sandbox: true` is passed to `ask-gemini`:
 
 ```bash
-gemini --sandbox "your prompt"
+gemini -s "your prompt"
 ```
 
 Enables safe code execution in isolated environment.
+
+### YOLO Mode
+
+When `yolo: true` is passed:
+
+```bash
+gemini --yolo "your prompt"
+```
+
+Auto-approves ALL tool executions without confirmation prompts. **Required for any Gemini CLI extension** that needs tool approval.
+
+#### Gemini CLI Extensions
+
+Gemini CLI supports extensions that add new capabilities. Extensions may require `yolo: true` to auto-approve their tool calls.
+
+**Installing Extensions:**
+```bash
+# Install from GitHub URL
+gemini extensions install https://github.com/gemini-cli-extensions/workspace
+
+# Or from local path
+gemini extensions install /path/to/extension
+```
+
+**Popular Extensions:**
+
+| Extension | Description | URL |
+|-----------|-------------|-----|
+| **Google Workspace** | Gmail, Drive, Sheets, Docs, Calendar, Chat | `https://github.com/gemini-cli-extensions/workspace` |
+
+**Usage with MCP:**
+```json
+{
+  "prompt": "Search my Google Drive for 'budget' files and summarize them",
+  "yolo": true
+}
+```
+
+```json
+{
+  "prompt": "Read the latest emails from my inbox",
+  "yolo": true
+}
+```
+
+> ⚠️ **Security Note:** Without `yolo: true`, extension tools will hang waiting for user approval. The YOLO flag bypasses all confirmations, so use with trusted inputs only. Never use with untrusted emails or documents (indirect prompt injection risk).
 
 ### Change Mode
 
@@ -187,7 +233,8 @@ export GEMINI_API_KEY="your-key"
 | Flag | Description | MCP Parameter |
 |------|-------------|---------------|
 | `-m <model>` | Select model | `model` |
-| `--sandbox` | Enable sandbox mode | `sandbox` |
+| `-s` | Enable sandbox mode | `sandbox` |
+| `--yolo` | Auto-approve all tool calls | `yolo` |
 | `--change-mode` | Structured edit output | `changeMode` |
 | `--search` | Enable web search | (used by `search` tool) |
 

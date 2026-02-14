@@ -17,6 +17,7 @@ export async function executeGeminiCLI(
   prompt: string,
   model?: string,
   sandbox?: boolean,
+  yolo?: boolean,
   changeMode?: boolean,
   onProgress?: (newOutput: string) => void
 ): Promise<string> {
@@ -94,6 +95,9 @@ ${prompt_processed}
   if (sandbox) {
     args.push(CLI.FLAGS.SANDBOX);
   }
+  if (yolo) {
+    args.push(CLI.FLAGS.YOLO);
+  }
 
   // Ensure @ symbols work cross-platform by wrapping in quotes if needed
   const finalPrompt =
@@ -119,6 +123,9 @@ ${prompt_processed}
       fallbackArgs.push(CLI.FLAGS.MODEL, MODELS.FLASH);
       if (sandbox) {
         fallbackArgs.push(CLI.FLAGS.SANDBOX);
+      }
+      if (yolo) {
+        fallbackArgs.push(CLI.FLAGS.YOLO);
       }
 
       // Same @ symbol handling for fallback

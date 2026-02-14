@@ -7,6 +7,7 @@ export interface ToolArguments {
   prompt?: string;
   model?: string;
   sandbox?: boolean | string;
+  yolo?: boolean | string;
   changeMode?: boolean | string;
   chunkIndex?: number | string;
   chunkCacheKey?: string;
