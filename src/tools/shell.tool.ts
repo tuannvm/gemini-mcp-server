@@ -9,24 +9,26 @@ const shellArgsSchema = z.object({
     .string()
     .min(1)
     .describe(
-      'Description of the shell task to perform (e.g., "list all TypeScript files", "find large files over 10MB")'
+      'Shell task description. REQUIRED. Describe what you want to accomplish in natural language (e.g., "find all TypeScript files modified in the last week", "compress all log files in the logs directory", "set up a new React project with Vite"). Gemini will generate appropriate commands.'
     ),
   workingDirectory: z
     .string()
     .optional()
     .describe(
-      'Working directory for command execution (use @ syntax, e.g., @src/)'
+      'Directory to run commands in. OPTIONAL. Use @ prefix for clarity (e.g., @src/, @/home/user/project). If omitted, uses current working directory. Relative paths are relative to cwd.'
     ),
   dryRun: z
     .boolean()
     .default(true)
     .describe(
-      'If true, Gemini will explain the commands without executing. If false, uses sandbox mode for safe execution.'
+      "Command execution mode. DEFAULT: true (safe). When true: Gemini explains commands WITHOUT executing. When false: commands execute in sandbox mode. Set to false only when you want actual execution with safety isolation."
     ),
   model: z
     .string()
     .optional()
-    .describe('Model to use (default: gemini-3-flash-preview)'),
+    .describe(
+      "Gemini model to use. DEFAULT: 'gemini-3-flash-preview' (fast for command generation). Use 'gemini-3-pro-preview' for complex multi-step operations. Flash is usually sufficient for shell tasks."
+    ),
 });
 
 export const shellTool: UnifiedTool = {
@@ -47,22 +49,23 @@ export const shellTool: UnifiedTool = {
       task: {
         type: 'string',
         description:
-          'Description of the shell task to perform (e.g., "list all TypeScript files", "find large files over 10MB")',
+          'Shell task description. REQUIRED. Describe what you want to accomplish (e.g., "find TypeScript files modified last week", "compress log files"). Gemini will generate appropriate commands.',
       },
       workingDirectory: {
         type: 'string',
         description:
-          'Working directory for command execution (use @ syntax, e.g., @src/)',
+          'Directory to run commands in. OPTIONAL. Use @ prefix (e.g., @src/). If omitted, uses current working directory.',
       },
       dryRun: {
         type: 'boolean',
         default: true,
         description:
-          'If true, Gemini will explain the commands without executing. If false, uses sandbox mode for safe execution.',
+          'Command execution mode. DEFAULT: true (safe, explains without executing). When false: executes in sandbox. Set to false only for actual execution.',
       },
       model: {
         type: 'string',
-        description: 'Model to use (default: gemini-3-flash-preview)',
+        description:
+          "Gemini model to use. DEFAULT: 'gemini-3-flash-preview' (fast). Use 'gemini-3-pro-preview' for complex operations.",
       },
     },
     required: ['task'],

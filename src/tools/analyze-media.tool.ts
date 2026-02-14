@@ -9,20 +9,26 @@ const analyzeMediaArgsSchema = z.object({
     .string()
     .min(1)
     .describe(
-      'Path to the image or PDF file to analyze. Use @ syntax (e.g., @image.png, @document.pdf)'
+      'Path to the media file to analyze. REQUIRED. Use @ prefix for file reference (e.g., @screenshot.png, @diagram.pdf, @photo.jpg). Supports: PNG, JPG, JPEG, GIF, WebP, PDF. Relative paths work from current working directory.'
     ),
   prompt: z
     .string()
     .min(1)
-    .describe('What to analyze or extract from the media file'),
+    .describe(
+      'What to analyze or extract from the media. REQUIRED. Be specific (e.g., "extract all text from this screenshot", "describe the UI components", "summarize this PDF document", "identify objects and their positions").'
+    ),
   model: z
     .string()
     .optional()
-    .describe('Model to use (default: gemini-3-pro-preview for multimodal)'),
+    .describe(
+      "Gemini model to use. DEFAULT: 'gemini-3-pro-preview' (best multimodal understanding). Use 'gemini-3-flash-preview' for faster but less detailed analysis. Pro recommended for complex images or documents."
+    ),
   detailed: z
     .boolean()
     .default(false)
-    .describe('Provide detailed analysis with more context'),
+    .describe(
+      'Enable comprehensive analysis mode. DEFAULT: false. Set to true for structured output with overview, key elements, technical details, observations, and recommendations. Use for complex analysis tasks.'
+    ),
 });
 
 export const analyzeMediaTool: UnifiedTool = {
@@ -43,21 +49,23 @@ export const analyzeMediaTool: UnifiedTool = {
       filePath: {
         type: 'string',
         description:
-          'Path to the image or PDF file to analyze. Use @ syntax (e.g., @image.png, @document.pdf)',
+          'Path to the media file to analyze. REQUIRED. Use @ prefix (e.g., @screenshot.png, @diagram.pdf). Supports: PNG, JPG, JPEG, GIF, WebP, PDF.',
       },
       prompt: {
         type: 'string',
-        description: 'What to analyze or extract from the media file',
+        description:
+          'What to analyze or extract from the media. REQUIRED. Be specific (e.g., "extract all text", "describe UI components", "summarize document").',
       },
       model: {
         type: 'string',
         description:
-          'Model to use (default: gemini-3-pro-preview for multimodal)',
+          "Gemini model to use. DEFAULT: 'gemini-3-pro-preview' (best multimodal). Use 'gemini-3-flash-preview' for faster but less detailed analysis.",
       },
       detailed: {
         type: 'boolean',
         default: false,
-        description: 'Provide detailed analysis with more context',
+        description:
+          'Enable comprehensive analysis mode. DEFAULT: false. Set to true for structured output with overview, key elements, and recommendations.',
       },
     },
     required: ['filePath', 'prompt'],

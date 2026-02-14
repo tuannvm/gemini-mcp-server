@@ -8,15 +8,21 @@ const searchArgsSchema = z.object({
   query: z
     .string()
     .min(1)
-    .describe('Search query to find information on the web'),
+    .describe(
+      'Search query for web search. REQUIRED. Use natural language or keywords (e.g., "latest React 19 features", "TypeScript 5.4 release date", "how to fix CORS error"). Gemini will search and synthesize results.'
+    ),
   summarize: z
     .boolean()
     .default(true)
-    .describe('Summarize the search results (default: true)'),
+    .describe(
+      "Return summarized results vs raw output. DEFAULT: true. Set to false only if you need raw search results without synthesis. Summarized mode provides cleaner, actionable information."
+    ),
   model: z
     .string()
     .optional()
-    .describe('Model to use (default: gemini-3-flash-preview for speed)'),
+    .describe(
+      "Gemini model to use. DEFAULT: 'gemini-3-flash-preview' (optimized for speed). Use 'gemini-3-pro-preview' for complex research requiring deeper analysis. Flash is recommended for most searches."
+    ),
 });
 
 export const searchTool: UnifiedTool = {
@@ -36,16 +42,19 @@ export const searchTool: UnifiedTool = {
     properties: {
       query: {
         type: 'string',
-        description: 'Search query to find information on the web',
+        description:
+          'Search query for web search. REQUIRED. Use natural language or keywords (e.g., "latest React 19 features", "TypeScript 5.4 release date"). Gemini will search and synthesize results.',
       },
       summarize: {
         type: 'boolean',
         default: true,
-        description: 'Summarize the search results (default: true)',
+        description:
+          'Return summarized results vs raw output. DEFAULT: true. Set to false only if you need raw search results. Summarized mode provides cleaner, actionable information.',
       },
       model: {
         type: 'string',
-        description: 'Model to use (default: gemini-3-flash-preview for speed)',
+        description:
+          "Gemini model to use. DEFAULT: 'gemini-3-flash-preview' (optimized for speed). Use 'gemini-3-pro-preview' for complex research requiring deeper analysis.",
       },
     },
     required: ['query'],

@@ -44,6 +44,53 @@ describe('New Tools', () => {
     });
   });
 
+  describe('Gemini Tool Schema', () => {
+    test('should have yolo parameter for Google Workspace extension', async () => {
+      const { getToolDefinitions } = await import('../tools/index.js');
+      const tools = getToolDefinitions();
+
+      const geminiTool = tools.find((t) => t.name === 'gemini');
+      expect(geminiTool).toBeDefined();
+      expect(geminiTool?.inputSchema.properties).toHaveProperty('yolo');
+
+      const yoloProp = geminiTool?.inputSchema.properties?.yolo as {
+        type: string;
+        default: boolean;
+      };
+      expect(yoloProp.type).toBe('boolean');
+      expect(yoloProp.default).toBe(false);
+    });
+
+    test('yolo description should mention Google Workspace extension', async () => {
+      const { getToolDefinitions } = await import('../tools/index.js');
+      const tools = getToolDefinitions();
+
+      const geminiTool = tools.find((t) => t.name === 'gemini');
+      const yoloProp = geminiTool?.inputSchema.properties?.yolo as {
+        description: string;
+      };
+      const yoloDesc = yoloProp.description;
+
+      expect(yoloDesc).toContain('YOLO');
+      expect(yoloDesc).toContain('Google Workspace');
+      expect(yoloDesc).toContain('gemini-cli-extensions/workspace');
+      expect(yoloDesc).toContain('auto-approve');
+    });
+
+    test('yolo should be optional with default false', async () => {
+      const { getToolDefinitions } = await import('../tools/index.js');
+      const tools = getToolDefinitions();
+
+      const geminiTool = tools.find((t) => t.name === 'gemini');
+      expect(geminiTool?.inputSchema.required).not.toContain('yolo');
+
+      const yoloProp = geminiTool?.inputSchema.properties?.yolo as {
+        default: boolean;
+      };
+      expect(yoloProp.default).toBe(false);
+    });
+  });
+
   describe('Tool Existence Check', () => {
     test('should recognize new tools', async () => {
       const { toolExists } = await import('../tools/index.js');

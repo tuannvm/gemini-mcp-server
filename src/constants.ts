@@ -63,6 +63,7 @@ export const CLI = {
     SANDBOX: '-s',
     PROMPT: '-p',
     HELP: '-help',
+    YOLO: '--yolo',
   },
   DEFAULTS: {
     MODEL: 'default',

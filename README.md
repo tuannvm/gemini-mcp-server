@@ -19,6 +19,9 @@ graph LR
     M --> H
     SH --> H
     D --> H
+    H --> E[Extensions]
+    E --> W[Google Workspace]
+    E --> X[Custom Extensions]
 
     style A fill:#FF6B35
     style B fill:#4A90E2
@@ -28,6 +31,9 @@ graph LR
     style SH fill:#00D4AA
     style D fill:#00D4AA
     style H fill:#4285F4
+    style E fill:#FBBC05
+    style W fill:#34A853
+    style X fill:#EA4335
 ```
 
 ## Quick Start
@@ -79,6 +85,30 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS)
 | **analyze-media** | Process images, PDFs, and screenshots |
 | **shell** | Generate and execute shell commands |
 | **brainstorm** | Creative ideation with structured methodologies |
+
+## Gemini CLI Extensions
+
+Enable access to Gmail, Drive, Sheets, Docs, Calendar, and more through Gemini CLI extensions.
+
+```bash
+# Install the Google Workspace extension
+gemini extensions install https://github.com/gemini-cli-extensions/workspace
+```
+
+Then use with `yolo: true` to auto-approve extension tool calls:
+
+```
+# Search your Google Drive
+Use gemini with yolo=true to search my Google Drive for Q4 reports
+
+# Read a Google Sheet
+Use gemini with yolo=true to read the first sheet from "Budget 2025"
+
+# Access Gmail
+Use gemini with yolo=true to summarize my last 10 unread emails
+```
+
+> **Note:** Any Gemini CLI extension can be used. Pass the full GitHub URL or local path to `gemini extensions install`.
 
 ## Examples
 

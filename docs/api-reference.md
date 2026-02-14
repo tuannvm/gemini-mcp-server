@@ -55,13 +55,38 @@ Analyze files and codebases using Gemini's large context window with the `@` syn
 | `prompt` | string | Yes | - | Your question or analysis request. Use `@` syntax for file references |
 | `model` | string | No | `gemini-3-pro-preview` | Model to use |
 | `sandbox` | boolean | No | `false` | Enable sandbox mode for safe execution |
+| `yolo` | boolean | No | `false` | Auto-approve all tool executions (required for Google Workspace) |
 | `changeMode` | boolean | No | `false` | Enable structured edit mode |
+| `chunkIndex` | number | No | - | Chunk to retrieve (1-based) for large responses |
+| `chunkCacheKey` | string | No | - | Cache key from previous chunked response |
 
 #### Model Options
 
 - `gemini-3-pro-preview` (default) - Most capable, complex reasoning
 - `gemini-3-flash-preview` - Fast responses, good quality
 - `gemini-2.5-flash-lite` - Fastest, lightweight
+
+#### YOLO Mode
+
+When `yolo: true` is set, Gemini auto-approves all tool executions without confirmation prompts. **Required for Gemini CLI extensions** that need tool approval (e.g., Google Workspace, custom extensions).
+
+```json
+{
+  "prompt": "Search my Google Drive for budget spreadsheets",
+  "yolo": true
+}
+```
+
+**Installing Extensions:**
+```bash
+# Install from full GitHub URL
+gemini extensions install https://github.com/gemini-cli-extensions/workspace
+
+# Install from local path
+gemini extensions install /path/to/your-extension
+```
+
+> ⚠️ **Security:** Without `yolo: true`, extension tools will hang waiting for approval. YOLO bypasses all confirmations—use with trusted inputs only.
 
 #### Examples
 
@@ -85,6 +110,14 @@ Analyze files and codebases using Gemini's large context window with the `@` syn
 {
   "prompt": "Refactor @src/utils.ts for better error handling",
   "changeMode": true
+}
+```
+
+**Google Workspace:**
+```json
+{
+  "prompt": "Read the 'Sales Q4' spreadsheet and summarize the data",
+  "yolo": true
 }
 ```
 

@@ -134,12 +134,14 @@ const brainstormArgsSchema = z.object({
   prompt: z
     .string()
     .min(1)
-    .describe('Primary brainstorming challenge or question to explore'),
+    .describe(
+      'The brainstorming challenge or question. REQUIRED. Be specific about what you need ideas for (e.g., "ways to reduce API latency", "features for a fitness app", "marketing strategies for B2B SaaS"). More context yields better ideas.'
+    ),
   model: z
     .string()
     .optional()
     .describe(
-      "Optional model to use (e.g., 'gemini-3-flash-preview'). If not specified, uses the default model (gemini-3-pro-preview)."
+      "Gemini model to use. OPTIONS: 'gemini-3-pro-preview' (default, best for creative thinking), 'gemini-3-flash-preview' (faster). Use Pro for complex brainstorming requiring deep domain knowledge. Omit for default."
     ),
   methodology: z
     .enum([
@@ -152,37 +154,39 @@ const brainstormArgsSchema = z.object({
     ])
     .default('auto')
     .describe(
-      "Brainstorming framework: 'divergent' (generate many ideas), 'convergent' (refine existing), 'scamper' (systematic triggers), 'design-thinking' (human-centered), 'lateral' (unexpected connections), 'auto' (AI selects best)"
+      "Brainstorming framework. OPTIONS: 'auto' (default, AI selects best approach), 'divergent' (maximize quantity of ideas), 'convergent' (refine and prioritize existing ideas), 'scamper' (systematic creative triggers: Substitute/Combine/Adapt/Modify/Put to other use/Eliminate/Reverse), 'design-thinking' (human-centered, user-focused solutions), 'lateral' (unexpected connections, challenge assumptions). Use 'auto' unless you have a specific methodology preference."
     ),
   domain: z
     .string()
     .optional()
     .describe(
-      "Domain context for specialized brainstorming (e.g., 'software', 'business', 'creative', 'research', 'product', 'marketing')"
+      "Domain expertise to apply. EXAMPLES: 'software', 'business', 'marketing', 'product', 'research', 'healthcare', 'finance', 'education'. Helps Gemini apply domain-specific knowledge, terminology, and best practices. Include for specialized output."
     ),
   constraints: z
     .string()
     .optional()
     .describe(
-      'Known limitations, requirements, or boundaries (budget, time, technical, legal, etc.)'
+      "Limitations and requirements to respect. EXAMPLES: 'budget under $10k', 'must work offline', 'no external APIs', 'launch in 2 weeks'. Helps filter ideas to only feasible options. Include any hard requirements."
     ),
   existingContext: z
     .string()
     .optional()
     .describe(
-      'Background information, previous attempts, or current state to build upon'
+      "Background information to build upon. EXAMPLES: 'we tried X but it failed because Y', 'current solution uses React', 'team has 3 engineers'. Provides context for more relevant, actionable ideas."
     ),
   ideaCount: z
     .number()
     .int()
     .positive()
     .default(12)
-    .describe('Target number of ideas to generate (default: 10-15)'),
+    .describe(
+      'Number of ideas to generate. DEFAULT: 12. Use higher numbers (15-20) for divergent exploration, lower numbers (5-8) for focused, detailed ideas.'
+    ),
   includeAnalysis: z
     .boolean()
     .default(true)
     .describe(
-      'Include feasibility, impact, and implementation analysis for generated ideas'
+      "Include feasibility/impact/innovation ratings for each idea. DEFAULT: true. Set to false for faster, simpler output without analysis. Ratings use 1-5 scale."
     ),
 });
 
@@ -203,12 +207,13 @@ export const brainstormTool: UnifiedTool = {
     properties: {
       prompt: {
         type: 'string',
-        description: 'Primary brainstorming challenge or question to explore',
+        description:
+          'The brainstorming challenge or question. REQUIRED. Be specific about what you need ideas for (e.g., "ways to reduce API latency", "features for a fitness app", "marketing strategies for B2B SaaS"). More context yields better ideas.',
       },
       model: {
         type: 'string',
         description:
-          "Optional model to use (e.g., 'gemini-3-flash-preview'). If not specified, uses the default model (gemini-3-pro-preview).",
+          "Gemini model to use. OPTIONS: 'gemini-3-pro-preview' (default, best for creative thinking), 'gemini-3-flash-preview' (faster). Use Pro for complex brainstorming requiring deep domain knowledge. Omit for default.",
       },
       methodology: {
         type: 'string',
@@ -222,33 +227,34 @@ export const brainstormTool: UnifiedTool = {
         ],
         default: 'auto',
         description:
-          "Brainstorming framework: 'divergent' (generate many ideas), 'convergent' (refine existing), 'scamper' (systematic triggers), 'design-thinking' (human-centered), 'lateral' (unexpected connections), 'auto' (AI selects best)",
+          "Brainstorming framework. OPTIONS: 'auto' (default, AI selects best approach), 'divergent' (maximize quantity of ideas), 'convergent' (refine and prioritize existing ideas), 'scamper' (systematic creative triggers), 'design-thinking' (human-centered solutions), 'lateral' (unexpected connections). Use 'auto' unless you have a specific preference.",
       },
       domain: {
         type: 'string',
         description:
-          "Domain context for specialized brainstorming (e.g., 'software', 'business', 'creative', 'research', 'product', 'marketing')",
+          "Domain expertise to apply. EXAMPLES: 'software', 'business', 'marketing', 'product', 'research', 'healthcare', 'finance'. Helps Gemini apply domain-specific knowledge. Include for specialized output.",
       },
       constraints: {
         type: 'string',
         description:
-          'Known limitations, requirements, or boundaries (budget, time, technical, legal, etc.)',
+          "Limitations and requirements to respect. EXAMPLES: 'budget under $10k', 'must work offline', 'launch in 2 weeks'. Helps filter ideas to only feasible options.",
       },
       existingContext: {
         type: 'string',
         description:
-          'Background information, previous attempts, or current state to build upon',
+          "Background information to build upon. EXAMPLES: 'we tried X but failed because Y', 'current solution uses React'. Provides context for more relevant ideas.",
       },
       ideaCount: {
         type: 'integer',
         default: 12,
-        description: 'Target number of ideas to generate (default: 10-15)',
+        description:
+          'Number of ideas to generate. DEFAULT: 12. Use higher (15-20) for exploration, lower (5-8) for focused detailed ideas.',
       },
       includeAnalysis: {
         type: 'boolean',
         default: true,
         description:
-          'Include feasibility, impact, and implementation analysis for generated ideas',
+          "Include feasibility/impact/innovation ratings for each idea. DEFAULT: true. Set to false for faster output without analysis.",
       },
     },
     required: ['prompt'],
@@ -295,12 +301,13 @@ export const brainstormTool: UnifiedTool = {
       `Generating ${ideaCount} ideas via ${methodology} methodology...`
     );
 
-    // Execute with Gemini
+    // Execute with Gemini (yolo not typically needed for brainstorming)
     return await executeGeminiCLI(
       enhancedPrompt,
       model as string | undefined,
-      false,
-      false,
+      false, // sandbox
+      false, // yolo
+      false, // changeMode
       onProgress
     );
   },
