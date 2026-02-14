@@ -186,7 +186,7 @@ const brainstormArgsSchema = z.object({
     .boolean()
     .default(true)
     .describe(
-      "Include feasibility/impact/innovation ratings for each idea. DEFAULT: true. Set to false for faster, simpler output without analysis. Ratings use 1-5 scale."
+      'Include feasibility/impact/innovation ratings for each idea. DEFAULT: true. Set to false for faster, simpler output without analysis. Ratings use 1-5 scale.'
     ),
 });
 
@@ -254,7 +254,7 @@ export const brainstormTool: UnifiedTool = {
         type: 'boolean',
         default: true,
         description:
-          "Include feasibility/impact/innovation ratings for each idea. DEFAULT: true. Set to false for faster output without analysis.",
+          'Include feasibility/impact/innovation ratings for each idea. DEFAULT: true. Set to false for faster output without analysis.',
       },
     },
     required: ['prompt'],

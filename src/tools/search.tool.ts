@@ -15,7 +15,7 @@ const searchArgsSchema = z.object({
     .boolean()
     .default(true)
     .describe(
-      "Return summarized results vs raw output. DEFAULT: true. Set to false only if you need raw search results without synthesis. Summarized mode provides cleaner, actionable information."
+      'Return summarized results vs raw output. DEFAULT: true. Set to false only if you need raw search results without synthesis. Summarized mode provides cleaner, actionable information.'
     ),
   model: z
     .string()

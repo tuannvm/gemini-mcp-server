@@ -23,7 +23,7 @@ const askGeminiArgsSchema = z.object({
     .boolean()
     .default(false)
     .describe(
-      "Enable sandboxed code execution (-s flag). Use when Gemini needs to run code, execute scripts, or test changes in isolation. Sandbox prevents modifications to your actual filesystem. Set to true for code execution tasks."
+      'Enable sandboxed code execution (-s flag). Use when Gemini needs to run code, execute scripts, or test changes in isolation. Sandbox prevents modifications to your actual filesystem. Set to true for code execution tasks.'
     ),
   yolo: z
     .boolean()
@@ -35,7 +35,7 @@ const askGeminiArgsSchema = z.object({
     .boolean()
     .default(false)
     .describe(
-      "Enable structured edit mode for code modifications. Returns edits in OLD/NEW format that can be applied programmatically. Use when requesting code changes that need to be applied to files. The response will include exact line numbers and replacement blocks."
+      'Enable structured edit mode for code modifications. Returns edits in OLD/NEW format that can be applied programmatically. Use when requesting code changes that need to be applied to files. The response will include exact line numbers and replacement blocks.'
     ),
   chunkIndex: z
     .union([z.number(), z.string()])
@@ -113,8 +113,15 @@ export const askGeminiTool: UnifiedTool = {
   },
   category: 'gemini',
   execute: async (args, onProgress) => {
-    const { prompt, model, sandbox, yolo, changeMode, chunkIndex, chunkCacheKey } =
-      args;
+    const {
+      prompt,
+      model,
+      sandbox,
+      yolo,
+      changeMode,
+      chunkIndex,
+      chunkCacheKey,
+    } = args;
     if (!prompt?.trim()) {
       throw new Error(ERROR_MESSAGES.NO_PROMPT_PROVIDED);
     }

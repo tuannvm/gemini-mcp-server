@@ -21,7 +21,7 @@ const shellArgsSchema = z.object({
     .boolean()
     .default(true)
     .describe(
-      "Command execution mode. DEFAULT: true (safe). When true: Gemini explains commands WITHOUT executing. When false: commands execute in sandbox mode. Set to false only when you want actual execution with safety isolation."
+      'Command execution mode. DEFAULT: true (safe). When true: Gemini explains commands WITHOUT executing. When false: commands execute in sandbox mode. Set to false only when you want actual execution with safety isolation.'
     ),
   model: z
     .string()
