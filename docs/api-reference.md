@@ -26,6 +26,7 @@ All tools include annotations that provide hints to MCP clients about tool behav
 |------|-------|---------------|-------------------|------------------|-----------------|
 | `gemini` | Query Gemini AI | `false` | `true` | `false` | `true` |
 | `web-search` | Web Search | `true` | `false` | `false` | `true` |
+| `web-search-priority` | Web Search Priority | `true` | `false` | `false` | `true` |
 | `analyze-media` | Analyze Media | `true` | `false` | `false` | `true` |
 | `shell` | Shell Commands | `false` | `true` | `false` | `true` |
 | `brainstorm` | Brainstorm Ideas | `true` | `false` | `false` | `true` |
@@ -38,7 +39,7 @@ All tools include annotations that provide hints to MCP clients about tool behav
 
 For long-running operations, the server sends `notifications/progress` messages when the client includes a `progressToken` in the request `_meta`.
 
-**Supported Tools:** `gemini`, `web-search`, `analyze-media`, `shell`, `brainstorm`
+**Supported Tools:** `gemini`, `web-search`, `web-search-priority`, `analyze-media`, `shell`, `brainstorm`
 
 ---
 
@@ -149,6 +150,86 @@ Search the web using Gemini with Google Search grounding for real-time informati
 {
   "query": "kubernetes security best practices 2025",
   "summarize": false
+}
+```
+
+---
+
+### `web-search-priority` - Enhanced Web Search
+
+Search the web with advanced filtering and prioritization using Gemini's Google Search grounding.
+
+#### Parameters
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `query` | string | Yes | - | Search query |
+| `sourcePriority` | string | No | - | Prioritize specific source types |
+| `dateRange` | string | No | - | Filter results by date |
+| `domainWhitelist` | string[] | No | - | Only search specified domains |
+| `domainBlacklist` | string[] | No | - | Exclude specified domains |
+| `resultCount` | number | No | `10` | Number of results (5, 10, or 20) |
+| `model` | string | No | `gemini-3-flash-preview` | Model to use |
+| `verbose` | boolean | No | `false` | Return detailed results with sources |
+
+#### Source Priority Options
+
+- `news` - Recent news articles, press releases, current events
+- `academic` - Research papers, journals, scientific publications
+- `documentation` - Official docs, API references, technical guides
+- `general` - Balanced results from diverse sources (default)
+
+#### Date Range Options
+
+- `recent` - Last 24 hours
+- `past-week` - Past 7 days
+- `past-month` - Past 30 days
+- `all-time` - No date filter (default)
+
+#### Examples
+
+**Documentation Search:**
+```json
+{
+  "query": "React Server Components best practices",
+  "sourcePriority": "documentation",
+  "dateRange": "past-month"
+}
+```
+
+**Recent News:**
+```json
+{
+  "query": "TypeScript 5.4 release",
+  "sourcePriority": "news",
+  "dateRange": "recent"
+}
+```
+
+**Academic Research:**
+```json
+{
+  "query": "machine learning interpretability",
+  "sourcePriority": "academic",
+  "resultCount": 20
+}
+```
+
+**Domain Filtering:**
+```json
+{
+  "query": "Kubernetes security",
+  "domainWhitelist": ["kubernetes.io", "github.com"],
+  "dateRange": "past-month"
+}
+```
+
+**Exclude Domains:**
+```json
+{
+  "query": "Rust programming tutorial",
+  "domainBlacklist": ["spam.com", "ads.example.net"],
+  "verbose": true
 }
 ```
 

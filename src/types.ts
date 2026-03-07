@@ -46,6 +46,7 @@ export type ProgressCallback = (newOutput: string) => void;
 export const TOOLS = {
   GEMINI: 'gemini',
   WEB_SEARCH: 'web-search',
+  WEB_SEARCH_PRIORITY: 'web-search-priority',
   ANALYZE_MEDIA: 'analyze-media',
   SHELL: 'shell',
   BRAINSTORM: 'brainstorm',
@@ -65,3 +66,25 @@ export const MODELS = {
 } as const;
 
 export type ModelName = (typeof MODELS)[keyof typeof MODELS];
+
+// Prioritized Web Search Types
+export const SEARCH_SOURCE_TYPES = {
+  NEWS: 'news',
+  ACADEMIC: 'academic',
+  DOCUMENTATION: 'documentation',
+  GENERAL: 'general',
+} as const;
+
+export type SearchSourceType = (typeof SEARCH_SOURCE_TYPES)[keyof typeof SEARCH_SOURCE_TYPES];
+
+export const DATE_RANGE_OPTIONS = {
+  RECENT: 'recent',      // Last 24 hours
+  PAST_WEEK: 'past-week',
+  PAST_MONTH: 'past-month',
+  ALL_TIME: 'all-time',
+} as const;
+
+export type DateRangeOption = (typeof DATE_RANGE_OPTIONS)[keyof typeof DATE_RANGE_OPTIONS];
+
+export const RESULT_COUNT_OPTIONS = [5, 10, 20] as const;
+export type ResultCountOption = (typeof RESULT_COUNT_OPTIONS)[number];
