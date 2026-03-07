@@ -1,5 +1,5 @@
 /**
- * Tests for new tools: search, web-search-priority, analyze-media, shell
+ * Tests for new tools: search, analyze-media, shell
  */
 
 // Mock chalk for ESM compatibility
@@ -32,19 +32,6 @@ describe('New Tools', () => {
       const analyzeMediaTool = tools.find((t) => t.name === 'analyze-media');
       expect(analyzeMediaTool).toBeDefined();
       expect(analyzeMediaTool?.description).toContain('media');
-    });
-
-    test('should include web-search-priority tool', async () => {
-      const { getToolDefinitions } = await import('../tools/index.js');
-      const tools = getToolDefinitions();
-
-      const webSearchPriorityTool = tools.find(
-        (t) => t.name === 'web-search-priority'
-      );
-      expect(webSearchPriorityTool).toBeDefined();
-      expect(webSearchPriorityTool?.description).toContain(
-        'Google Search grounding'
-      );
     });
 
     test('should include shell tool', async () => {
@@ -109,7 +96,6 @@ describe('New Tools', () => {
       const { toolExists } = await import('../tools/index.js');
 
       expect(toolExists('web-search')).toBe(true);
-      expect(toolExists('web-search-priority')).toBe(true);
       expect(toolExists('analyze-media')).toBe(true);
       expect(toolExists('shell')).toBe(true);
     });
@@ -131,57 +117,6 @@ describe('New Tools', () => {
 
       const searchTool = tools.find((t) => t.name === 'web-search');
       expect(searchTool?.inputSchema.properties).toHaveProperty('summarize');
-    });
-  });
-
-  describe('Web Search Priority Tool Schema', () => {
-    test('should have required query parameter', async () => {
-      const { getToolDefinitions } = await import('../tools/index.js');
-      const tools = getToolDefinitions();
-
-      const webSearchPriorityTool = tools.find(
-        (t) => t.name === 'web-search-priority'
-      );
-      expect(webSearchPriorityTool?.inputSchema.properties).toHaveProperty(
-        'query'
-      );
-      expect(webSearchPriorityTool?.inputSchema.required).toContain('query');
-    });
-
-    test('should have optional searchContext parameter', async () => {
-      const { getToolDefinitions } = await import('../tools/index.js');
-      const tools = getToolDefinitions();
-
-      const webSearchPriorityTool = tools.find(
-        (t) => t.name === 'web-search-priority'
-      );
-      expect(webSearchPriorityTool?.inputSchema.properties).toHaveProperty(
-        'searchContext'
-      );
-    });
-
-    test('should enforce max length on query parameter', async () => {
-      const { getToolDefinitions } = await import('../tools/index.js');
-      const tools = getToolDefinitions();
-
-      const webSearchPriorityTool = tools.find(
-        (t) => t.name === 'web-search-priority'
-      );
-      const queryProp = webSearchPriorityTool?.inputSchema.properties
-        ?.query as { maxLength: number };
-      expect(queryProp?.maxLength).toBe(2000);
-    });
-
-    test('should enforce max length on searchContext parameter', async () => {
-      const { getToolDefinitions } = await import('../tools/index.js');
-      const tools = getToolDefinitions();
-
-      const webSearchPriorityTool = tools.find(
-        (t) => t.name === 'web-search-priority'
-      );
-      const searchContextProp = webSearchPriorityTool?.inputSchema.properties
-        ?.searchContext as { maxLength: number };
-      expect(searchContextProp?.maxLength).toBe(1000);
     });
   });
 
@@ -240,12 +175,12 @@ describe('New Tools', () => {
   });
 
   describe('Tool Count', () => {
-    test('should have 10 total tools registered', async () => {
+    test('should have 9 total tools registered', async () => {
       const { getToolDefinitions } = await import('../tools/index.js');
       const tools = getToolDefinitions();
 
-      // gemini, web-search, web-search-priority, analyze-media, shell, brainstorm, fetch-chunk, ping, help, timeout-test
-      expect(tools.length).toBe(10);
+      // gemini, web-search, analyze-media, shell, brainstorm, fetch-chunk, ping, help, timeout-test
+      expect(tools.length).toBe(9);
     });
   });
 });

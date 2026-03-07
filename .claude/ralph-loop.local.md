@@ -2,27 +2,25 @@
 active: true
 iteration: 1
 max_iterations: 15
-completion_promise: "SIMPLIFIED_WEB_SEARCH_COMPLETE"
-started_at: "2026-03-07T16:35:29Z"
+completion_promise: "SEARCH_UNIFICATION_COMPLETE"
+started_at: "2026-03-07T16:46:00Z"
 ---
 
-Refactor the web-search-priority tool to stick closely with gemini CLI's web search capabilities instead of reinventing the wheel.
+Remove the web-search-priority tool and merge any enhancements into the original web-search tool.
 
-Current Issue:
-The current implementation tries to implement complex search features (source priority, domain filtering, date ranges, result counts) that are NOT native to gemini CLI. Gemini CLI uses Google Search grounding through the model's natural language understanding - the model decides when and how to search based on the prompt.
+Context:
+Having two separate web search tools is redundant. The original web-search tool is simpler and well-established. Any enhancements from web-search-priority should be merged into web-search instead.
 
-Refactoring Requirements:
-1. Simplify the tool to leverage gemini CLI's native web search capabilities
-2. Remove artificial constraints like sourcePriority enum, domainWhitelist/Blacklist arrays, dateRange enum
-3. Keep it simple like the existing web-search tool - just pass natural language prompts to gemini
-4. Let users express their search requirements naturally in the query itself
-5. Consider a simple 'searchContext' or 'instructions' parameter for additional guidance
+Requirements:
+1. Delete webSearchPriority.tool.ts completely
+2. Remove web-search-priority from tools/index.ts registry
+3. Remove WEB_SEARCH_PRIORITY from types.ts TOOLS constant
+4. Remove all web-search-priority tests from __tests__/new-tools.test.ts
+5. Update test count from 10 tools back to 9
+6. Consider if the original web-search tool needs the searchContext parameter for additional flexibility
+7. Update README.md to remove web-search-priority references
+8. Update docs/api-reference.md to remove web-search-priority section
+9. Run all tests to ensure nothing is broken
+10. Verify the implementation is clean and consistent
 
-The tool should:
-- Use gemini CLI's Google Search grounding (built-in)
-- Allow natural language search queries
-- Support optional search instructions/context
-- Keep the same model selection and quota fallback patterns
-- Maintain security (input sanitization, validation)
-
-Follow the existing patterns from search.tool.ts - simple, effective, leveraging the model's capabilities rather than trying to control them artificially.
+The goal is to have a single, clean web-search tool that leverages gemini CLI's native capabilities without redundancy.

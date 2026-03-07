@@ -26,7 +26,6 @@ All tools include annotations that provide hints to MCP clients about tool behav
 |------|-------|---------------|-------------------|------------------|-----------------|
 | `gemini` | Query Gemini AI | `false` | `true` | `false` | `true` |
 | `web-search` | Web Search | `true` | `false` | `false` | `true` |
-| `web-search-priority` | Web Search Priority | `true` | `false` | `false` | `true` |
 | `analyze-media` | Analyze Media | `true` | `false` | `false` | `true` |
 | `shell` | Shell Commands | `false` | `true` | `false` | `true` |
 | `brainstorm` | Brainstorm Ideas | `true` | `false` | `false` | `true` |
@@ -39,7 +38,7 @@ All tools include annotations that provide hints to MCP clients about tool behav
 
 For long-running operations, the server sends `notifications/progress` messages when the client includes a `progressToken` in the request `_meta`.
 
-**Supported Tools:** `gemini`, `web-search`, `web-search-priority`, `analyze-media`, `shell`, `brainstorm`
+**Supported Tools:** `gemini`, `web-search`, `analyze-media`, `shell`, `brainstorm`
 
 ---
 
@@ -150,52 +149,6 @@ Search the web using Gemini with Google Search grounding for real-time informati
 {
   "query": "kubernetes security best practices 2025",
   "summarize": false
-}
-```
-
----
-
-### `web-search-priority` - Enhanced Web Search
-
-Search the web using Gemini's Google Search grounding with natural language queries. Express search preferences directly in your query or use optional search context.
-
-#### Parameters
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `query` | string | Yes | - | Search query with natural language preferences |
-| `searchContext` | string | No | - | Additional search instructions or context |
-| `model` | string | No | `gemini-3-flash-preview` | Model to use |
-
-#### Examples
-
-**Natural Language Query:**
-```json
-{
-  "query": "find recent React 19 documentation from official sources"
-}
-```
-
-**With Search Context:**
-```json
-{
-  "query": "TypeScript 5.4 best practices",
-  "searchContext": "prioritize official documentation and guides from the past month"
-}
-```
-
-**News Search:**
-```json
-{
-  "query": "latest AI safety research papers from the past week"
-}
-```
-
-**Academic Focus:**
-```json
-{
-  "query": "machine learning interpretability research",
-  "searchContext": "focus on peer-reviewed academic papers and scholarly articles"
 }
 ```
 

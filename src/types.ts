@@ -46,7 +46,6 @@ export type ProgressCallback = (newOutput: string) => void;
 export const TOOLS = {
   GEMINI: 'gemini',
   WEB_SEARCH: 'web-search',
-  WEB_SEARCH_PRIORITY: 'web-search-priority',
   ANALYZE_MEDIA: 'analyze-media',
   SHELL: 'shell',
   BRAINSTORM: 'brainstorm',

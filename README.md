@@ -11,13 +11,11 @@ graph LR
     A[Claude Code] --> B[Gemini MCP Server]
     B --> C[gemini]
     B --> S[web-search]
-    B --> SP[web-search-priority]
     B --> M[analyze-media]
     B --> SH[shell]
     B --> D[brainstorm]
     C --> H[Gemini CLI]
     S --> H
-    SP --> H
     M --> H
     SH --> H
     D --> H
@@ -29,7 +27,6 @@ graph LR
     style B fill:#4A90E2
     style C fill:#00D4AA
     style S fill:#00D4AA
-    style SP fill:#00D4AA
     style M fill:#00D4AA
     style SH fill:#00D4AA
     style D fill:#00D4AA
@@ -85,7 +82,6 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS)
 |------|--------------|
 | **gemini** | Analyze files and codebases with Gemini's 1M+ token context |
 | **web-search** | Search the web with Google Search grounding |
-| **web-search-priority** | Enhanced web search with natural language queries and optional search context |
 | **analyze-media** | Process images, PDFs, and screenshots |
 | **shell** | Generate and execute shell commands |
 | **brainstorm** | Creative ideation with structured methodologies |
@@ -125,9 +121,6 @@ Use gemini to compare @src/old.ts and @src/new.ts
 
 # Search the web
 Use web-search to find the latest React 19 features
-
-# Search with context
-Use web-search-priority with query "TypeScript 5.4 best practices" and searchContext="prioritize official documentation from the past month"
 
 # Analyze a screenshot
 Use analyze-media with filePath "@error.png" and prompt "what's this error?"
