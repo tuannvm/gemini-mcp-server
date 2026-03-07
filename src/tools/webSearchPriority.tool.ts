@@ -22,7 +22,8 @@ import {
  * Validates standard domain format (e.g., example.com, sub.example.co.uk)
  * Prevents injection of shell metacharacters and invalid domains
  */
-const DOMAIN_REGEX = /^(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$/;
+const DOMAIN_REGEX =
+  /^(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$/;
 
 /**
  * Zod schema for web-search-priority tool arguments
@@ -60,18 +61,24 @@ const webSearchPriorityArgsSchema = z
         'Filter results by date: recent (last 24 hours), past-week, past-month, all-time (default)'
       ),
     domainWhitelist: z
-      .array(z.string().refine((val) => DOMAIN_REGEX.test(val), {
-        message: 'Invalid domain format. Must be a valid domain (e.g., example.com)',
-      }))
+      .array(
+        z.string().refine((val) => DOMAIN_REGEX.test(val), {
+          message:
+            'Invalid domain format. Must be a valid domain (e.g., example.com)',
+        })
+      )
       .max(50)
       .optional()
       .describe(
         'Limit search to specific domains (e.g., ["github.com", "docs.example.com"]). Results only from whitelisted domains. Maximum 50 domains.'
       ),
     domainBlacklist: z
-      .array(z.string().refine((val) => DOMAIN_REGEX.test(val), {
-        message: 'Invalid domain format. Must be a valid domain (e.g., example.com)',
-      }))
+      .array(
+        z.string().refine((val) => DOMAIN_REGEX.test(val), {
+          message:
+            'Invalid domain format. Must be a valid domain (e.g., example.com)',
+        })
+      )
       .max(50)
       .optional()
       .describe(
@@ -120,7 +127,7 @@ function isQuotaError(errorMessage: string): boolean {
 function sanitizeInput(input: string): string {
   // Remove dangerous shell metacharacters
   return input
-    .replace(/[\n\r]/g, ' ')  // Newlines to spaces
+    .replace(/[\n\r]/g, ' ') // Newlines to spaces
     .replace(/[;&|`$()]/g, '') // Remove shell metacharacters
     .trim();
 }
@@ -129,13 +136,17 @@ function sanitizeInput(input: string): string {
  * Validate and sanitize domain list
  */
 function sanitizeDomainList(domains: string[]): string[] {
-  return domains.map((d) => d.trim().toLowerCase()).filter((d) => DOMAIN_REGEX.test(d));
+  return domains
+    .map((d) => d.trim().toLowerCase())
+    .filter((d) => DOMAIN_REGEX.test(d));
 }
 
 /**
  * Build the search prompt with priority filters
  */
-function buildSearchPrompt(args: z.infer<typeof webSearchPriorityArgsSchema>): string {
+function buildSearchPrompt(
+  args: z.infer<typeof webSearchPriorityArgsSchema>
+): string {
   const {
     query,
     sourcePriority,
@@ -164,17 +175,25 @@ function buildSearchPrompt(args: z.infer<typeof webSearchPriorityArgsSchema>): s
   if (sourcePriority) {
     switch (sourcePriority) {
       case SEARCH_SOURCE_TYPES.NEWS:
-        instructions.push('PRIORITIZE recent news articles, press releases, and current events from major news outlets.');
+        instructions.push(
+          'PRIORITIZE recent news articles, press releases, and current events from major news outlets.'
+        );
         break;
       case SEARCH_SOURCE_TYPES.ACADEMIC:
-        instructions.push('PRIORITIZE academic research papers, journals, scientific publications, and scholarly articles.');
+        instructions.push(
+          'PRIORITIZE academic research papers, journals, scientific publications, and scholarly articles.'
+        );
         break;
       case SEARCH_SOURCE_TYPES.DOCUMENTATION:
-        instructions.push('PRIORITIZE official documentation, API references, technical guides, and developer resources.');
+        instructions.push(
+          'PRIORITIZE official documentation, API references, technical guides, and developer resources.'
+        );
         break;
       case SEARCH_SOURCE_TYPES.GENERAL:
       default:
-        instructions.push('Use balanced search results from diverse, authoritative sources.');
+        instructions.push(
+          'Use balanced search results from diverse, authoritative sources.'
+        );
         break;
     }
   }
@@ -183,7 +202,9 @@ function buildSearchPrompt(args: z.infer<typeof webSearchPriorityArgsSchema>): s
   if (dateRange) {
     switch (dateRange) {
       case DATE_RANGE_OPTIONS.RECENT:
-        instructions.push('Filter: ONLY results from the last 24 hours (very recent).');
+        instructions.push(
+          'Filter: ONLY results from the last 24 hours (very recent).'
+        );
         break;
       case DATE_RANGE_OPTIONS.PAST_WEEK:
         instructions.push('Filter: ONLY results from the past 7 days.');
@@ -200,15 +221,21 @@ function buildSearchPrompt(args: z.infer<typeof webSearchPriorityArgsSchema>): s
 
   // Domain filtering instructions
   if (sanitizedWhitelist.length > 0) {
-    instructions.push(`Filter: ONLY results from domains: ${sanitizedWhitelist.join(', ')}`);
+    instructions.push(
+      `Filter: ONLY results from domains: ${sanitizedWhitelist.join(', ')}`
+    );
   }
 
   if (sanitizedBlacklist.length > 0) {
-    instructions.push(`Filter: EXCLUDE results from domains: ${sanitizedBlacklist.join(', ')}`);
+    instructions.push(
+      `Filter: EXCLUDE results from domains: ${sanitizedBlacklist.join(', ')}`
+    );
   }
 
   // Result count
-  instructions.push(`Return the top ${resultCountValue} most relevant results.`);
+  instructions.push(
+    `Return the top ${resultCountValue} most relevant results.`
+  );
 
   // Verbose output
   if (verbose) {
@@ -253,7 +280,8 @@ export const webSearchPriorityTool: UnifiedTool = {
     properties: {
       query: {
         type: 'string',
-        description: 'Search query for web search. REQUIRED. Use natural language or keywords. Maximum 2000 characters.',
+        description:
+          'Search query for web search. REQUIRED. Use natural language or keywords. Maximum 2000 characters.',
         minLength: 1,
         maxLength: 2000,
       },
@@ -276,7 +304,8 @@ export const webSearchPriorityTool: UnifiedTool = {
           DATE_RANGE_OPTIONS.PAST_MONTH,
           DATE_RANGE_OPTIONS.ALL_TIME,
         ],
-        description: "Filter results by date: recent (24h), past-week, past-month, all-time (default)",
+        description:
+          'Filter results by date: recent (24h), past-week, past-month, all-time (default)',
       },
       domainWhitelist: {
         type: 'array',
@@ -284,7 +313,8 @@ export const webSearchPriorityTool: UnifiedTool = {
           type: 'string',
         },
         maxItems: 50,
-        description: "Limit search to specific domains (e.g., ['github.com', 'docs.example.com']). Must be valid domain formats. Maximum 50 domains.",
+        description:
+          "Limit search to specific domains (e.g., ['github.com', 'docs.example.com']). Must be valid domain formats. Maximum 50 domains.",
       },
       domainBlacklist: {
         type: 'array',
@@ -292,12 +322,14 @@ export const webSearchPriorityTool: UnifiedTool = {
           type: 'string',
         },
         maxItems: 50,
-        description: "Exclude specific domains from results (e.g., ['spam.com', 'ads.example.net']). Must be valid domain formats. Maximum 50 domains.",
+        description:
+          "Exclude specific domains from results (e.g., ['spam.com', 'ads.example.net']). Must be valid domain formats. Maximum 50 domains.",
       },
       resultCount: {
         type: 'number',
         enum: [5, 10, 20],
-        description: 'Number of results: 5 (fastest), 10 (default), 20 (comprehensive)',
+        description:
+          'Number of results: 5 (fastest), 10 (default), 20 (comprehensive)',
       },
       model: {
         type: 'string',
@@ -305,7 +337,8 @@ export const webSearchPriorityTool: UnifiedTool = {
       },
       verbose: {
         type: 'boolean',
-        description: 'Return detailed results with sources vs concise summary. DEFAULT: false',
+        description:
+          'Return detailed results with sources vs concise summary. DEFAULT: false',
       },
     },
     required: ['query'],

@@ -140,7 +140,9 @@ describe('New Tools', () => {
       const webSearchPriorityTool = tools.find(
         (t) => t.name === 'web-search-priority'
       );
-      expect(webSearchPriorityTool?.inputSchema.properties).toHaveProperty('query');
+      expect(webSearchPriorityTool?.inputSchema.properties).toHaveProperty(
+        'query'
+      );
       expect(webSearchPriorityTool?.inputSchema.required).toContain('query');
     });
 
@@ -151,7 +153,9 @@ describe('New Tools', () => {
       const webSearchPriorityTool = tools.find(
         (t) => t.name === 'web-search-priority'
       );
-      expect(webSearchPriorityTool?.inputSchema.properties).toHaveProperty('sourcePriority');
+      expect(webSearchPriorityTool?.inputSchema.properties).toHaveProperty(
+        'sourcePriority'
+      );
     });
 
     test('should have optional dateRange parameter', async () => {
@@ -161,7 +165,9 @@ describe('New Tools', () => {
       const webSearchPriorityTool = tools.find(
         (t) => t.name === 'web-search-priority'
       );
-      expect(webSearchPriorityTool?.inputSchema.properties).toHaveProperty('dateRange');
+      expect(webSearchPriorityTool?.inputSchema.properties).toHaveProperty(
+        'dateRange'
+      );
     });
 
     test('should have optional domainWhitelist parameter', async () => {
@@ -171,7 +177,9 @@ describe('New Tools', () => {
       const webSearchPriorityTool = tools.find(
         (t) => t.name === 'web-search-priority'
       );
-      expect(webSearchPriorityTool?.inputSchema.properties).toHaveProperty('domainWhitelist');
+      expect(webSearchPriorityTool?.inputSchema.properties).toHaveProperty(
+        'domainWhitelist'
+      );
     });
 
     test('should have optional domainBlacklist parameter', async () => {
@@ -181,7 +189,9 @@ describe('New Tools', () => {
       const webSearchPriorityTool = tools.find(
         (t) => t.name === 'web-search-priority'
       );
-      expect(webSearchPriorityTool?.inputSchema.properties).toHaveProperty('domainBlacklist');
+      expect(webSearchPriorityTool?.inputSchema.properties).toHaveProperty(
+        'domainBlacklist'
+      );
     });
 
     test('should have optional resultCount parameter', async () => {
@@ -191,7 +201,9 @@ describe('New Tools', () => {
       const webSearchPriorityTool = tools.find(
         (t) => t.name === 'web-search-priority'
       );
-      expect(webSearchPriorityTool?.inputSchema.properties).toHaveProperty('resultCount');
+      expect(webSearchPriorityTool?.inputSchema.properties).toHaveProperty(
+        'resultCount'
+      );
     });
 
     test('should have optional verbose parameter', async () => {
@@ -201,7 +213,9 @@ describe('New Tools', () => {
       const webSearchPriorityTool = tools.find(
         (t) => t.name === 'web-search-priority'
       );
-      expect(webSearchPriorityTool?.inputSchema.properties).toHaveProperty('verbose');
+      expect(webSearchPriorityTool?.inputSchema.properties).toHaveProperty(
+        'verbose'
+      );
     });
 
     test('should enforce max length on query parameter', async () => {
