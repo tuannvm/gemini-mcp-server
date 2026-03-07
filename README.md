@@ -85,7 +85,7 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS)
 |------|--------------|
 | **gemini** | Analyze files and codebases with Gemini's 1M+ token context |
 | **web-search** | Search the web with Google Search grounding |
-| **web-search-priority** | Enhanced web search with source prioritization, domain filtering, and date range control |
+| **web-search-priority** | Enhanced web search with natural language queries and optional search context |
 | **analyze-media** | Process images, PDFs, and screenshots |
 | **shell** | Generate and execute shell commands |
 | **brainstorm** | Creative ideation with structured methodologies |
@@ -126,8 +126,8 @@ Use gemini to compare @src/old.ts and @src/new.ts
 # Search the web
 Use web-search to find the latest React 19 features
 
-# Search with source prioritization
-Use web-search-priority with query "TypeScript 5.4 best practices", sourcePriority="documentation", dateRange="past-month"
+# Search with context
+Use web-search-priority with query "TypeScript 5.4 best practices" and searchContext="prioritize official documentation from the past month"
 
 # Analyze a screenshot
 Use analyze-media with filePath "@error.png" and prompt "what's this error?"

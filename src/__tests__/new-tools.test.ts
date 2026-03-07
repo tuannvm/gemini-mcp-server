@@ -42,7 +42,9 @@ describe('New Tools', () => {
         (t) => t.name === 'web-search-priority'
       );
       expect(webSearchPriorityTool).toBeDefined();
-      expect(webSearchPriorityTool?.description).toContain('prioritization');
+      expect(webSearchPriorityTool?.description).toContain(
+        'Google Search grounding'
+      );
     });
 
     test('should include shell tool', async () => {
@@ -146,7 +148,7 @@ describe('New Tools', () => {
       expect(webSearchPriorityTool?.inputSchema.required).toContain('query');
     });
 
-    test('should have optional sourcePriority parameter', async () => {
+    test('should have optional searchContext parameter', async () => {
       const { getToolDefinitions } = await import('../tools/index.js');
       const tools = getToolDefinitions();
 
@@ -154,67 +156,7 @@ describe('New Tools', () => {
         (t) => t.name === 'web-search-priority'
       );
       expect(webSearchPriorityTool?.inputSchema.properties).toHaveProperty(
-        'sourcePriority'
-      );
-    });
-
-    test('should have optional dateRange parameter', async () => {
-      const { getToolDefinitions } = await import('../tools/index.js');
-      const tools = getToolDefinitions();
-
-      const webSearchPriorityTool = tools.find(
-        (t) => t.name === 'web-search-priority'
-      );
-      expect(webSearchPriorityTool?.inputSchema.properties).toHaveProperty(
-        'dateRange'
-      );
-    });
-
-    test('should have optional domainWhitelist parameter', async () => {
-      const { getToolDefinitions } = await import('../tools/index.js');
-      const tools = getToolDefinitions();
-
-      const webSearchPriorityTool = tools.find(
-        (t) => t.name === 'web-search-priority'
-      );
-      expect(webSearchPriorityTool?.inputSchema.properties).toHaveProperty(
-        'domainWhitelist'
-      );
-    });
-
-    test('should have optional domainBlacklist parameter', async () => {
-      const { getToolDefinitions } = await import('../tools/index.js');
-      const tools = getToolDefinitions();
-
-      const webSearchPriorityTool = tools.find(
-        (t) => t.name === 'web-search-priority'
-      );
-      expect(webSearchPriorityTool?.inputSchema.properties).toHaveProperty(
-        'domainBlacklist'
-      );
-    });
-
-    test('should have optional resultCount parameter', async () => {
-      const { getToolDefinitions } = await import('../tools/index.js');
-      const tools = getToolDefinitions();
-
-      const webSearchPriorityTool = tools.find(
-        (t) => t.name === 'web-search-priority'
-      );
-      expect(webSearchPriorityTool?.inputSchema.properties).toHaveProperty(
-        'resultCount'
-      );
-    });
-
-    test('should have optional verbose parameter', async () => {
-      const { getToolDefinitions } = await import('../tools/index.js');
-      const tools = getToolDefinitions();
-
-      const webSearchPriorityTool = tools.find(
-        (t) => t.name === 'web-search-priority'
-      );
-      expect(webSearchPriorityTool?.inputSchema.properties).toHaveProperty(
-        'verbose'
+        'searchContext'
       );
     });
 
@@ -230,19 +172,16 @@ describe('New Tools', () => {
       expect(queryProp?.maxLength).toBe(2000);
     });
 
-    test('should enforce max items on domain lists', async () => {
+    test('should enforce max length on searchContext parameter', async () => {
       const { getToolDefinitions } = await import('../tools/index.js');
       const tools = getToolDefinitions();
 
       const webSearchPriorityTool = tools.find(
         (t) => t.name === 'web-search-priority'
       );
-      const whitelistProp = webSearchPriorityTool?.inputSchema.properties
-        ?.domainWhitelist as { maxItems: number };
-      const blacklistProp = webSearchPriorityTool?.inputSchema.properties
-        ?.domainBlacklist as { maxItems: number };
-      expect(whitelistProp?.maxItems).toBe(50);
-      expect(blacklistProp?.maxItems).toBe(50);
+      const searchContextProp = webSearchPriorityTool?.inputSchema.properties
+        ?.searchContext as { maxLength: number };
+      expect(searchContextProp?.maxLength).toBe(1000);
     });
   });
 

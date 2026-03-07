@@ -157,79 +157,45 @@ Search the web using Gemini with Google Search grounding for real-time informati
 
 ### `web-search-priority` - Enhanced Web Search
 
-Search the web with advanced filtering and prioritization using Gemini's Google Search grounding.
+Search the web using Gemini's Google Search grounding with natural language queries. Express search preferences directly in your query or use optional search context.
 
 #### Parameters
 
 | Parameter | Type | Required | Default | Description |
 |-----------|------|----------|---------|-------------|
-| `query` | string | Yes | - | Search query |
-| `sourcePriority` | string | No | - | Prioritize specific source types |
-| `dateRange` | string | No | - | Filter results by date |
-| `domainWhitelist` | string[] | No | - | Only search specified domains |
-| `domainBlacklist` | string[] | No | - | Exclude specified domains |
-| `resultCount` | number | No | `10` | Number of results (5, 10, or 20) |
+| `query` | string | Yes | - | Search query with natural language preferences |
+| `searchContext` | string | No | - | Additional search instructions or context |
 | `model` | string | No | `gemini-3-flash-preview` | Model to use |
-| `verbose` | boolean | No | `false` | Return detailed results with sources |
-
-#### Source Priority Options
-
-- `news` - Recent news articles, press releases, current events
-- `academic` - Research papers, journals, scientific publications
-- `documentation` - Official docs, API references, technical guides
-- `general` - Balanced results from diverse sources (default)
-
-#### Date Range Options
-
-- `recent` - Last 24 hours
-- `past-week` - Past 7 days
-- `past-month` - Past 30 days
-- `all-time` - No date filter (default)
 
 #### Examples
 
-**Documentation Search:**
+**Natural Language Query:**
 ```json
 {
-  "query": "React Server Components best practices",
-  "sourcePriority": "documentation",
-  "dateRange": "past-month"
+  "query": "find recent React 19 documentation from official sources"
 }
 ```
 
-**Recent News:**
+**With Search Context:**
 ```json
 {
-  "query": "TypeScript 5.4 release",
-  "sourcePriority": "news",
-  "dateRange": "recent"
+  "query": "TypeScript 5.4 best practices",
+  "searchContext": "prioritize official documentation and guides from the past month"
 }
 ```
 
-**Academic Research:**
+**News Search:**
 ```json
 {
-  "query": "machine learning interpretability",
-  "sourcePriority": "academic",
-  "resultCount": 20
+  "query": "latest AI safety research papers from the past week"
 }
 ```
 
-**Domain Filtering:**
+**Academic Focus:**
 ```json
 {
-  "query": "Kubernetes security",
-  "domainWhitelist": ["kubernetes.io", "github.com"],
-  "dateRange": "past-month"
-}
-```
-
-**Exclude Domains:**
-```json
-{
-  "query": "Rust programming tutorial",
-  "domainBlacklist": ["spam.com", "ads.example.net"],
-  "verbose": true
+  "query": "machine learning interpretability research",
+  "searchContext": "focus on peer-reviewed academic papers and scholarly articles"
 }
 ```
 
